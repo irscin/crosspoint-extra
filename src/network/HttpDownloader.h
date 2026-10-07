@@ -3,6 +3,8 @@
 
 #include <functional>
 #include <string>
+#include <utility>
+#include <vector>
 
 /**
  * HTTP client utility for fetching content and downloading files. Built on
@@ -23,8 +25,11 @@ class HttpDownloader {
     HTTP_ERROR,
     FILE_ERROR,
     ABORTED,
-    CACHE_ERROR,  // File committed, but stale reading cache could not be removed.
+    CACHE_ERROR,   // File committed, but stale reading cache could not be removed.
+    UNAUTHORIZED,  // 401/403: callers holding a refreshable credential can retry
   };
+
+  using Header = std::pair<std::string, std::string>;
 
   // Pre-flight floor for starting a TLS transfer. Below this the session or
   // its ~17KB record buffer fails mid-stream (wolfSSL MEMORY_E) - or an
@@ -51,12 +56,14 @@ class HttpDownloader {
                        ProgressCallback progress = nullptr, bool* cancelFlag = nullptr);
 
   /**
-   * Download a file to the SD card with optional credentials.
+   * Download a file to the SD card with optional credentials. `headers` are
+   * added to the request (e.g. a Bearer Authorization) and stay with the
+   * starting origin, alongside any Basic auth derived from username/password.
    *
    * The legacy downgradeRedirectsToHttp flag is rejected by the TLS backend.
    */
   static DownloadError downloadToFile(const std::string& url, const std::string& destPath,
                                       ProgressCallback progress = nullptr, bool* cancelFlag = nullptr,
                                       const std::string& username = "", const std::string& password = "",
-                                      bool downgradeRedirectsToHttp = false);
+                                      const std::vector<Header>& headers = {}, bool downgradeRedirectsToHttp = false);
 };

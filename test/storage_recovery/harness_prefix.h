@@ -47,7 +47,7 @@ using HalFile=FsFile;
 inline SDCardManager Storage;
 struct Stream{};
 #include "HttpDownloader.h"
-struct Sink {std::function<bool(const uint8_t*,size_t)>write;HttpDownloader::ProgressCallback progress;bool*cancelFlag=nullptr;size_t total=0,downloaded=0;};
+struct Sink {std::function<bool(const uint8_t*,size_t)>write;HttpDownloader::ProgressCallback progress;bool*cancelFlag=nullptr;std::vector<HttpDownloader::Header>headers;int status=0;size_t total=0,downloaded=0;};
 inline HttpDownloader::DownloadError transferResult=HttpDownloader::OK;
 inline std::string transferBody="new-book";
 HttpDownloader::DownloadError runGetSecure(const std::string&,const std::string&,const std::string&,Sink&s,bool){

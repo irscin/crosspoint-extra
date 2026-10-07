@@ -32,6 +32,7 @@
 #include "TextSettingsActivity.h"
 #include "UIFontTiers.h"
 #include "activities/network/WifiSelectionActivity.h"
+#include "activities/plugins/PluginCatalogActivity.h"
 #include "activities/util/IntervalSelectionActivity.h"
 #include "activities/util/KeyboardEntryActivity.h"
 #include "components/TenorMenuChrome.h"
@@ -107,6 +108,7 @@ void SettingsActivity::rebuildSettingsLists() {
       {StrId::STR_KOREADER_SYNC, SettingAction::KOReaderSync},
       {StrId::STR_OPDS_SERVERS, SettingAction::OPDSBrowser},
       {StrId::STR_OPDS_BROWSER, SettingAction::BrowseOPDS},
+      {StrId::STR_PLUGINS, SettingAction::Plugins},
       {StrId::STR_CLEAR_READING_CACHE, SettingAction::ClearCache},
       {StrId::STR_CHECK_UPDATES, SettingAction::CheckForUpdates},
       {StrId::STR_SD_FIRMWARE_UPDATE, SettingAction::SdFirmwareUpdate},
@@ -502,6 +504,9 @@ void SettingsActivity::toggleCurrentSetting() {
         break;
       case SettingAction::BrowseOPDS:
         activityManager.goToBrowser();
+        break;
+      case SettingAction::Plugins:
+        startActivityForResult(std::make_unique<PluginCatalogActivity>(renderer, mappedInput), resultHandler);
         break;
       case SettingAction::BlePageTurner:
         startActivityForResult(std::make_unique<BlePageTurnerActivity>(renderer, mappedInput), resultHandler);

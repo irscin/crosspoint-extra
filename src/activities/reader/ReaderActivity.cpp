@@ -23,6 +23,7 @@
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "util/NgayGio.h"
+#include "util/PluginEvents.h"
 
 ReaderActivity::ReaderActivity(const char* name, GfxRenderer& renderer, MappedInputManager& mappedInput,
                                std::string bookPath, const bool allowFastInitialRefresh)
@@ -112,6 +113,8 @@ void ReaderActivity::commitOpen() {
 #endif
   APP_STATE.saveToFile();
   RECENT_BOOKS.addBook(bookPath, getBookTitle(), getBookAuthor(), getBookThumbBmpPath());
+  const pluginevents::Var openVars[] = {{"book", bookPath.c_str()}};
+  pluginevents::emit(pluginevents::Event::ReaderOpen, openVars, 1);
 #ifdef TENOR_TURN_TRACE
   LOG_INF("READER", "OPEN_COMMIT ms=%lu", millis() - started);
 #endif
@@ -120,6 +123,12 @@ void ReaderActivity::commitOpen() {
 void ReaderActivity::onExit() {
   Activity::onExit();
   commitOpen();
+  if (pluginevents::anySubscriber(pluginevents::Event::ReaderExit)) {
+    char percent[8];
+    snprintf(percent, sizeof(percent), "%d", getScreenshotInfo().progressPercent);
+    const pluginevents::Var vars[] = {{"book", bookPath.c_str()}, {"percent", percent}};
+    pluginevents::emit(pluginevents::Event::ReaderExit, vars, 2);
+  }
   pendingExternalTurn = 0;
 #ifdef TENOR_TURN_TRACE
   dropTurnTrace(pendingExternalTurnTrace, "exit");

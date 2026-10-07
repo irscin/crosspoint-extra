@@ -52,6 +52,8 @@ struct Sink {
   std::function<bool(const uint8_t*, size_t)> write;  // returns false to abort the transfer
   HttpDownloader::ProgressCallback progress;
   bool* cancelFlag = nullptr;
+  std::vector<HttpDownloader::Header> headers;  // sent to the starting origin only
+  int status = 0;                               // last HTTP status seen
   size_t total = 0;
   size_t downloaded = 0;
   unsigned long lastPumpMs = 0;
@@ -181,6 +183,9 @@ HttpDownloader::DownloadError runGetWolf(const std::string& startUrl, const std:
       const String encoded = base64::encode(credentials.c_str());
       http.addHeader("Authorization", std::string("Basic ") + encoded.c_str());
     }
+    if (freeink::http_url::sameOrigin(startUrl, url)) {
+      for (const auto& h : sink.headers) http.addHeader(h.first, h.second);
+    }
 
     LOG_DBG("HTTP", "wolfSSL GET");
     const int status = http.GET(
@@ -213,9 +218,10 @@ HttpDownloader::DownloadError runGetWolf(const std::string& startUrl, const std:
       url = std::move(nextUrl);
       continue;
     }
+    sink.status = status;
     if (status != 200) {
       LOG_ERR("HTTP", "wolfSSL unexpected status: %d", status);
-      return HttpDownloader::HTTP_ERROR;
+      return status == 401 || status == 403 ? HttpDownloader::UNAUTHORIZED : HttpDownloader::HTTP_ERROR;
     }
     if (http.callbackAborted()) return HttpDownloader::FILE_ERROR;
     if (!http.responseComplete()) {
@@ -288,6 +294,7 @@ HttpDownloader::DownloadError runGet(const std::string& url, const std::string& 
     const String header = "Basic " + base64::encode(credentials.c_str());
     esp_http_client_set_header(client, "Authorization", header.c_str());
   }
+  for (const auto& h : sink.headers) esp_http_client_set_header(client, h.first.c_str(), h.second.c_str());
 
   // open()/read() does not auto-follow redirects (only perform() does), so step
   // 30x responses manually. OPDS download endpoints and the GitHub release CDN
@@ -338,6 +345,7 @@ HttpDownloader::DownloadError runGet(const std::string& url, const std::string& 
     }
     if (!freeink::http_url::sameOrigin(url, currentUrl)) {
       esp_http_client_delete_header(client, "Authorization");
+      for (const auto& h : sink.headers) esp_http_client_delete_header(client, h.first.c_str());
     }
     esp_http_client_set_timeout_ms(client, HTTP_CONNECT_TIMEOUT_MS);
     sink.redirectLocation.clear();
@@ -365,7 +373,7 @@ HttpDownloader::DownloadError runGet(const std::string& url, const std::string& 
   if (contentLength < 0 || status != 200) {
     LOG_ERR("HTTP", "unexpected status: %d", status);
     esp_http_client_cleanup(client);
-    return HttpDownloader::HTTP_ERROR;
+    return status == 401 || status == 403 ? HttpDownloader::UNAUTHORIZED : HttpDownloader::HTTP_ERROR;
   }
 
   // Unknown lengths remain zero and progress still carries received bytes.
@@ -483,6 +491,7 @@ bool HttpDownloader::fetchUrl(const std::string& url, const DataCallback& onData
 HttpDownloader::DownloadError HttpDownloader::downloadToFile(const std::string& url, const std::string& destPath,
                                                              ProgressCallback progress, bool* cancelFlag,
                                                              const std::string& username, const std::string& password,
+                                                             const std::vector<Header>& headers,
                                                              bool downgradeRedirectsToHttp) {
   LOG_DBG("HTTP", "Downloading file");
 
@@ -497,6 +506,7 @@ HttpDownloader::DownloadError HttpDownloader::downloadToFile(const std::string& 
   Sink sink;
   sink.progress = std::move(progress);
   sink.cancelFlag = cancelFlag;
+  sink.headers = headers;
   sink.write = [&file](const uint8_t* data, size_t len) { return file.write(data, len) == len; };
   const DownloadError result = runGetSecure(url, username, password, sink, downgradeRedirectsToHttp);
   const bool synced = result == OK && file.sync();

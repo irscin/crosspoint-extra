@@ -88,7 +88,9 @@
 #include "UIFontTiers.h"
 #include "ReaderInkWeight.h"
 #include "platform/UsbSerialJtagHandoff.h"
+#include "WifiCredentialStore.h"
 #include "util/ButtonNavigator.h"
+#include "util/PluginEvents.h"
 #include "util/ScreenshotUtil.h"
 #include "util/WakeBook.h"
 
@@ -391,11 +393,61 @@ static void sleepUntilPowerButton() {
 
 static bool autoSleepBlockedUntilInput = false;
 
+// Plugin-event delivery on the way into deep sleep. sleep.enter is delivered
+// now, over the live connection or by bringing WiFi up when a plugin subscribes
+// (e.g. fetching a fresh /sleep.bmp so THIS sleep shows it; the drain runs
+// before goToSleep() renders the sleep screen). The connect path is bounded
+// (join deadline + drain event budget), skipped on low battery, and sleep is
+// never blocked on the network: a failed join or delivery just sleeps with the
+// previous image and the queued events retry on the next drain (at-least-once).
+static void deliverSleepPluginEvents() {
+  // Activity-owned state must be queued before sleep.enter and before this
+  // same-sleep drain. The hook is idempotent with ordinary activity teardown.
+  activityManager.prepareForSleep();
+
+  // Carry the open book and progress on sleep.enter itself so a sync handler
+  // bound to it pushes current progress on THIS connection.
+  pluginevents::Var vars[2];
+  size_t varCount = 0;
+  char percent[8];
+  const ScreenshotInfo info = activityManager.getScreenshotInfo();
+  if (info.readerType != ScreenshotInfo::ReaderType::None && !APP_STATE.openEpubPath.empty()) {
+    snprintf(percent, sizeof(percent), "%d", info.progressPercent);
+    vars[varCount++] = {"book", APP_STATE.openEpubPath.c_str()};
+    vars[varCount++] = {"percent", percent};
+  }
+  pluginevents::emit(pluginevents::Event::SleepEnter, vars, varCount);
+  if (WiFi.status() == WL_CONNECTED) {
+    pluginevents::drain(&renderer);
+    return;
+  }
+  // Any connect-flagged queued event justifies the join, not only sleep.enter.
+  if (!pluginevents::wantsConnectAny()) return;
+  if (powerManager.getBatteryPercentage() < 20) return;
+  const auto cred = WIFI_STORE.findCredential(WIFI_STORE.getLastConnectedSsid());
+  if (!cred) return;
+
+  GUI.drawPopup(renderer, tr(STR_LOADING_POPUP));
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(cred->ssid.c_str(), cred->password.c_str());
+  const unsigned long joinDeadline = millis() + 10000;
+  while (WiFi.status() != WL_CONNECTED && millis() < joinDeadline) {
+    delay(100);
+  }
+  if (WiFi.status() == WL_CONNECTED) {
+    pluginevents::drain(&renderer);
+  } else {
+    LOG_DBG("MAIN", "Sleep-event WiFi join timed out; deferring delivery");
+  }
+}
+
 // Enter deep sleep mode
 void enterDeepSleep(bool fromTimeout = false) {
   const uint32_t sleepStarted = millis();
   HalPowerManager::Lock powerLock;  // Ensure we are at normal CPU frequency for sleep preparation
   APP_STATE.lastSleepFromReader = activityManager.isReaderActivity();
+
+  deliverSleepPluginEvents();
 
   const bool isQuickResumeSleep =
       SETTINGS.sleepScreen == CrossPointSettings::SLEEP_SCREEN_MODE::QUICK_RESUME ||
@@ -646,6 +698,7 @@ void setup() {
   logHeapMark("i18n");
   KOREADER_STORE.loadFromFile();
   OPDS_STORE.loadFromFile();
+  pluginevents::refreshSubscriptions();
   UITheme::getInstance().reload();
   ButtonNavigator::setMappedInputManager(mappedInputManager);
   logHeapMark("stores");

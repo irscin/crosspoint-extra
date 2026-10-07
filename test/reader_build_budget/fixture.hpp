@@ -263,6 +263,12 @@ struct AppState {
   std::string openEpubPath;
   void saveToFile() { ++openWrites.stateSaves; }
 } APP_STATE;
+namespace pluginevents {
+enum class Event { ReaderOpen, ReaderExit };
+struct Var { const char* key; const char* value; };
+inline void emit(Event, const Var*, size_t) {}
+inline bool anySubscriber(Event) { return false; }
+}  // namespace pluginevents
 struct RecentBooks {
   void addBook(const std::string&, const std::string&, const std::string&, const std::string&) {
     ++openWrites.recentAdds;

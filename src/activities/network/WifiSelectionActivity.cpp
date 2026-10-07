@@ -20,6 +20,7 @@
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "network/TimezoneLookup.h"
+#include "util/PluginEvents.h"
 
 namespace fui = freeink::ui;
 
@@ -694,6 +695,10 @@ void WifiSelectionActivity::checkConnectionStatus() {
       RenderLock lock(*this);
       WIFI_STORE.setLastConnectedSsid(selectedSSID);
     }
+
+    // Every station join is a window where plugin senders are deliverable, so
+    // drain the plugin outboxes here. Cheap no-op when nothing is queued.
+    pluginevents::drain(&renderer);
 
     // If we entered a new password, ask if user wants to save it
     // Otherwise, immediately complete so parent can start web server

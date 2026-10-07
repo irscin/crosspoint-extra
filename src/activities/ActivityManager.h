@@ -27,6 +27,7 @@ enum class HomeMenuItem {
   SETTINGS_MENU,
   STATS_TAB,
   FAVORITES_TAB,
+  PLUGINS_TAB,
   RECENT_CONTINUE
 };
 
@@ -113,6 +114,8 @@ class ActivityManager {
   void goToFileBrowser(std::string path = {});
   void goToRecentBooks();
   void goToBrowser();
+  // initialPlugin (a plugin folder name) opens that plugin straight away.
+  void goToPlugins(bool showOpds, std::string initialPlugin = {});
   void goToReader(std::string path, bool allowFastInitialRefresh = false);
   bool goToSleep(bool fromTimeout = false);
   void goToBoot();
@@ -169,6 +172,7 @@ class ActivityManager {
   bool handleForcedRefresh();
   bool skipLoopDelay() const;
   ScreenshotInfo getScreenshotInfo() const;
+  void prepareForSleep();
 
   // If immediate is true, the update will be triggered immediately.
   // Otherwise, it will be deferred until the end of the current loop iteration.

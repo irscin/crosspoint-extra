@@ -23,6 +23,7 @@
 #include "home/RecentBooksActivity.h"
 #include "network/CrossPointWebServerActivity.h"
 #include "network/UsbDriveActivity.h"
+#include "plugins/PluginCatalogActivity.h"
 #include "reader/ReaderActivity.h"
 #include "settings/OpdsServerListActivity.h"
 #include "settings/SettingsActivity.h"
@@ -451,6 +452,11 @@ void ActivityManager::goToBrowser() {
   }
 }
 
+void ActivityManager::goToPlugins(bool showOpds, std::string initialPlugin) {
+  replaceActivity(std::make_unique<PluginCatalogActivity>(renderer, mappedInput, showOpds, /*rootMode=*/true,
+                                                          std::move(initialPlugin)));
+}
+
 void ActivityManager::goToReader(std::string path, const bool allowFastInitialRefresh) {
   if (path.empty()) {
     goToFileBrowser("/");
@@ -627,6 +633,12 @@ ScreenshotInfo ActivityManager::getScreenshotInfo() const {
     return currentActivity->getScreenshotInfo();
   }
   return {};
+}
+
+void ActivityManager::prepareForSleep() {
+  RenderLock lock;
+  for (const auto& activity : stackActivities) activity->prepareForSleep();
+  if (currentActivity) currentActivity->prepareForSleep();
 }
 
 void ActivityManager::requestUpdate(bool immediate) {

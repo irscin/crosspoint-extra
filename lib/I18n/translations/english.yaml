@@ -858,3 +858,38 @@ STR_FACE_DOWN_ACTION: "Face down"
 STR_FACE_UP_ACTION: "Face up"
 
 STR_DOUBLE_TAP_ACTION: "Double tap"
+
+STR_PLUGINS: "Plugins"
+
+STR_NO_PLUGINS_INSTALLED: "No plugins with device screens installed"
+
+STR_PLUGIN_WEB_ONLY: "Web-only plugin"
+
+STR_PLUGIN_SIGN_IN: "Sign in"
+
+STR_PLUGIN_SIGN_IN_HINT: "Not signed in yet"
+
+STR_PLUGIN_AUTH_WAITING: "Waiting for authorization..."
+
+STR_PLUGIN_AUTH_FAILED: "Sign-in failed or expired. Try again."
+
+STR_PLUGIN_NOT_SIGNED_IN: "Not signed in. Open the web Settings page and sign in via the plugin first."
+
+STR_PLUGIN_MANIFEST_INVALID: "Plugin manifest is missing or invalid"
+
+STR_PLUGIN_RECEIVES_EVENTS: "Receives: %s"
+
+STR_FETCH: "Fetch"
+
+STR_DOWNLOAD_COMPLETE: "Download complete"
+
+STR_EVENT_BOOK_OPEN: "book opens"
+
+STR_EVENT_BOOK_CLOSE: "book closes and progress"
+
+STR_EVENT_DOWNLOAD: "downloads"
+
+STR_EVENT_READING_SESSION: "reading sessions"
+
+STR_EVENT_SLEEP: "sleep and current book"
+

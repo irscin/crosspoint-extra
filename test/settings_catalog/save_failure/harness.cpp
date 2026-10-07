@@ -68,6 +68,7 @@ CHILD(ButtonRemapActivity);
 CHILD(StatusBarSettingsActivity);
 CHILD(KOReaderSettingsActivity);
 CHILD(OpdsServerListActivity);
+CHILD(PluginCatalogActivity);
 CHILD(BlePageTurnerActivity);
 CHILD(KeyboardEntryActivity);
 CHILD(WifiSelectionActivity);

@@ -67,7 +67,8 @@ void testLog(const char*, const char* format, ...) {
 }
 struct HttpDownloader {
   using ProgressCallback = std::function<void(size_t, size_t)>;
-  enum DownloadError { OK, HTTP_ERROR, FILE_ERROR, ABORTED };
+  using Header = std::pair<std::string, std::string>;
+  enum DownloadError { OK, HTTP_ERROR, FILE_ERROR, ABORTED, UNAUTHORIZED };
 };
 using esp_err_t = int;
 constexpr int ESP_OK = 0, WIFI_PS_NONE = 0, WIFI_PS_MIN_MODEM = 1;
@@ -81,7 +82,7 @@ class SecureHttpClient {
   void setCACert(const char* ca) { fake::caConfigured = ca && *ca; }
   bool begin(const std::string&) { ++fake::tlsBegins; return fake::caConfigured; }
   void setUserAgent(const char*) {}
-  void addHeader(const char*, const std::string&) {}
+  void addHeader(const std::string&, const std::string&) {}
   int GET(const std::function<bool(const uint8_t*,size_t)>& body, const std::function<bool()>& cancel) {
     if (cancel()) return -1;
     const uint8_t bytes[] = {'b', 'o', 'o', 'k'};

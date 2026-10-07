@@ -27,7 +27,7 @@ struct State {
   State() {
     for (auto& group : order)
       for (int i = 0; i < MAX_TABS; ++i) group[i] = i;
-    order[0] = {0, 1, 4, 2, 3, 5, 6, 7};
+    order[0] = {0, 1, 4, 6, 2, 5, 3, 7, 8};
     static_assert(settingstabs::TAB_COUNT == MAX_TABS, "Settings order must fit persisted tab slots");
     order[1] = settingstabs::DEFAULT_ORDER;
   }

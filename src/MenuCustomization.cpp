@@ -14,7 +14,7 @@ constexpr const char* PATH = "/.crosspoint/menu-customization.json";
 constexpr const char* TEMP = "/.crosspoint/menu-customization.tmp";
 constexpr const char* BACKUP = "/.crosspoint/menu-customization.bak";
 constexpr const char* GROUP_NAMES[] = {"home", "settings", "reader", "text"};
-constexpr int COUNTS[] = {5, settingstabs::TAB_COUNT, 4, 4};
+constexpr int COUNTS[] = {7, settingstabs::TAB_COUNT, 4, 4};
 bool read(const char* path) {
   auto file = Storage.open(path);
   if (!file || file.size() > 8192) return false;
@@ -30,6 +30,22 @@ bool read(const char* path) {
       for (auto v : doc["tabs"][GROUP_NAMES[g]].as<JsonArrayConst>()) {
         if (i >= MAX_TABS) break;
         if (v.is<uint8_t>()) data.order[g][i++] = v.as<uint8_t>();
+      }
+      // Saved before the Plugins tab (id 5) existed: slot it in right after Stats (id 2).
+      if (g == 0 && std::find(data.order[g].begin(), data.order[g].end(), 5) == data.order[g].end()) {
+        const auto stats = std::find(data.order[g].begin(), data.order[g].end(), 2);
+        if (stats != data.order[g].end() && stats + 1 != data.order[g].end()) {
+          std::copy_backward(stats + 1, data.order[g].end() - 1, data.order[g].end());
+          *(stats + 1) = 5;
+        }
+      }
+      // Same for Priorities (id 6): slot it in just before Stats (id 2).
+      if (g == 0 && std::find(data.order[g].begin(), data.order[g].end(), 6) == data.order[g].end()) {
+        const auto stats = std::find(data.order[g].begin(), data.order[g].end(), 2);
+        if (stats != data.order[g].end()) {
+          std::copy_backward(stats, data.order[g].end() - 1, data.order[g].end());
+          *stats = 6;
+        }
       }
     }
     data.normalize(g, COUNTS[g]);

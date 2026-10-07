@@ -11,6 +11,7 @@
 #include "RecentBooksStore.h"
 #include "activities/UiTabListActivity.h"
 #include "activities/settings/SettingsTabs.h"
+#include "util/PhoneTaskSync.h"
 #include "components/HomeExcerptStyle.h"
 
 struct Rect;
@@ -21,8 +22,8 @@ class HomeActivity final : public UiTabListActivity {
  public:
   // CAI_DAT chu khong phai SETTINGS: CrossPointSettings.h dinh nghia SETTINGS
   // thanh mot macro, nen Tab::SETTINGS no ra thanh mot loi bien dich kho doan.
-  enum class Tab : uint8_t { RECENT, FOLDER, STATS, CAI_DAT, FAVORITES };
-  static constexpr int TAB_COUNT = 5;
+  enum class Tab : uint8_t { RECENT, FOLDER, STATS, CAI_DAT, FAVORITES, PLUGINS, PRIORITIES };
+  static constexpr int TAB_COUNT = 7;
 
   explicit HomeActivity(GfxRenderer& renderer, MappedInputManager& mappedInput,
                         HomeMenuItem initialMenuItemValue = HomeMenuItem::NONE, bool cleanInitialRefresh = false);
@@ -30,6 +31,7 @@ class HomeActivity final : public UiTabListActivity {
   void restoreNavigation(const MenuNavigationState& state) override;
   void captureNavigation(MenuNavigationState& state) const override;
   void onExit() override;
+  void loop() override;
   void onPause() override;
   void onTick() override;
   void render(RenderLock&&) override;
@@ -71,7 +73,9 @@ class HomeActivity final : public UiTabListActivity {
   void buildScreen(UiScreen& screen) override;
   void activateIndex(int index) override;
   bool handleButtons() override;
-  bool supportsFavorites() const override { return activeTabId != Tab::STATS; }
+  bool supportsFavorites() const override {
+    return activeTabId != Tab::STATS && activeTabId != Tab::PLUGINS && activeTabId != Tab::PRIORITIES;
+  }
   std::string favoriteKey(int row) const override;
   void favoritesChanged() override;
   bool toggleFavorite(int row) override;
@@ -98,6 +102,13 @@ class HomeActivity final : public UiTabListActivity {
   std::vector<std::string> favoriteKeys;
   std::vector<std::string> favoriteValues;
   std::vector<int> settingsGroups;
+  std::vector<std::string> pluginNames;
+  PhoneTaskSync phoneSync;
+  bool phoneSyncTried = false;
+  void tickPhoneSync();
+  bool phoneSyncRibbonShown() const;
+  int phoneSyncRibbonHeight() const;
+  void drawPhoneSyncRibbon();  // folder names, one per row of the Plugins tab
   Tab activeTabId = Tab::RECENT;
 
   // Noi dung goc the nho, cho the Folder. Thu muc mang dau '/' o cuoi.

@@ -28,6 +28,7 @@ enum class HomeMenuItem {
   STATS_TAB,
   FAVORITES_TAB,
   PLUGINS_TAB,
+  PRIORITIES_TAB,
   RECENT_CONTINUE
 };
 

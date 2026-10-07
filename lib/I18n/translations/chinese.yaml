@@ -864,3 +864,24 @@ STR_EVENT_READING_SESSION: "阅读时段"
 
 STR_EVENT_SLEEP: "睡眠和当前书籍"
 
+STR_PRIORITIES: "任务清单"
+
+STR_NO_PRIORITIES: "暂无任务"
+
+STR_PRIORITIES_HINT: "请在 SD 卡的 /.crosspoint/ 文件夹中添加 priorities 文件"
+
+STR_PHONE_SYNC: "手机同步"
+
+STR_PHONE_SYNC_WAITING: "请连接手机..."
+
+STR_PHONE_SYNC_CONNECTED: "手机已连接"
+
+STR_PHONE_SYNC_PAIRED: "已配对"
+
+STR_PHONE_SYNC_PAUSED: "已关闭"
+
+STR_PHONE_SYNC_RESUME_HINT: "切换标签可恢复"
+
+STR_PHONE_SYNC_CODE: "配对码"
+
+STR_PHONE_SYNC_UNAVAILABLE: "无法使用手机同步"

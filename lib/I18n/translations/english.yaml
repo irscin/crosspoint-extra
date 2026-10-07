@@ -893,3 +893,24 @@ STR_EVENT_READING_SESSION: "reading sessions"
 
 STR_EVENT_SLEEP: "sleep and current book"
 
+STR_PRIORITIES: "To-do list"
+
+STR_NO_PRIORITIES: "No tasks yet"
+
+STR_PRIORITIES_HINT: "Put priorities.json in /.crosspoint/ on the SD card"
+
+STR_PHONE_SYNC: "Phone sync"
+
+STR_PHONE_SYNC_WAITING: "Waiting for the phone..."
+
+STR_PHONE_SYNC_CONNECTED: "Phone connected"
+
+STR_PHONE_SYNC_PAIRED: "Paired"
+
+STR_PHONE_SYNC_PAUSED: "Paused (idle)"
+
+STR_PHONE_SYNC_RESUME_HINT: "Switch tabs to resume"
+
+STR_PHONE_SYNC_CODE: "Code for the app"
+
+STR_PHONE_SYNC_UNAVAILABLE: "Phone sync is not available"

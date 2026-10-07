@@ -23,3 +23,6 @@ download = download
 bookmark = bookmark
 usb = usb
 blocks = blocks
+list-checks = list-checks
+checkbox-off = square
+checkbox-on = square-check

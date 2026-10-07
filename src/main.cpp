@@ -90,6 +90,7 @@
 #include "platform/UsbSerialJtagHandoff.h"
 #include "WifiCredentialStore.h"
 #include "util/ButtonNavigator.h"
+#include "network/TaskBleService.h"
 #include "util/PluginEvents.h"
 #include "util/ScreenshotUtil.h"
 #include "util/WakeBook.h"
@@ -2036,6 +2037,9 @@ void loop() {
     // it connects ended in an HCI ack failure and an interrupt watchdog reset
     // (X3, 18/09/2026). Keep full speed while the radio is up.
     const bool radioActive = freeink::ble::busy();
+#elif defined(FREEINK_CAP_BLE_TASKS) && FREEINK_CAP_BLE_TASKS
+    // Same reason for the phone-sync advertiser: it must not run on the idle 80 MHz clock.
+    const bool radioActive = taskble::running();
 #else
     const bool radioActive = false;
 #endif

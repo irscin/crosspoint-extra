@@ -101,6 +101,21 @@ def inject_web_i18n(content, file_path):
     return content
 
 
+def resolve_includes(html: str, base_dir: str) -> str:
+    """Inline <!--#include file="path" --> directives (path relative to base_dir).
+
+    Must run BEFORE minify_html, which strips all HTML comments. Includes are
+    single-level (no included file includes another), so one pass suffices."""
+    pattern = re.compile(r'<!--\s*#include\s+file="([^"]+)"\s*-->')
+
+    def repl(match):
+        inc_path = os.path.join(base_dir, match.group(1))
+        with open(inc_path, "r", encoding="utf-8") as f:
+            return f.read()
+
+    return pattern.sub(repl, html)
+
+
 for root, _, files in os.walk(SRC_DIR):
     for file in files:
         if file.endswith((".html", ".js", ".css")):
@@ -119,6 +134,7 @@ for root, _, files in os.walk(SRC_DIR):
                     data = base64.b64encode(font.read()).decode("ascii")
                 content = content.replace("/* TENOR_WEB_FONT */", "@font-face{font-family:Geist;src:url(data:font/woff2;base64," + data + ") format('woff2');font-weight:400 700;font-display:swap}")
             content = inject_web_i18n(content, file_path)
+            content = resolve_includes(content, root)
             # Only minify HTML files; JS files are typically pre-minified (e.g., jszip.min.js)
             if file.endswith(".html"):
                 processed = minify_html(content)

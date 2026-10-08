@@ -32,6 +32,7 @@
 #include "html/FilesPageHtml.generated.h"
 #include "html/FontsPageHtml.generated.h"
 #include "html/HomePageHtml.generated.h"
+#include "html/RunnerPageHtml.generated.h"
 #include "html/SettingsPageHtml.generated.h"
 #include "html/ThemeCss.generated.h"
 #include "html/js/jszip_minJs.generated.h"
@@ -39,6 +40,28 @@
 #include "util/TaskWatchdog.h"
 
 namespace {
+// Arduino's WebServer retains parsed request arguments until the next request. For JSON POSTs that
+// includes the complete "plain" body. This narrow subclass exposes a release operation so large
+// request bodies do not stay resident between requests and outbound TLS can reuse that memory.
+class CrossPointHttpServer final : public WebServer {
+ public:
+  explicit CrossPointHttpServer(uint16_t port) : WebServer(port) {}
+
+  void releaseRequestArguments() {
+    if (_currentArgs) {
+      delete[] _currentArgs;
+      _currentArgs = nullptr;
+    }
+    _currentArgCount = 0;
+
+    if (_postArgs) {
+      delete[] _postArgs;
+      _postArgs = nullptr;
+    }
+    _postArgsLen = 0;
+  }
+};
+
 // Folders/files to hide from the web interface file browser
 // Note: Items starting with "." are automatically hidden
 constexpr uint16_t UDP_PORTS[] = {54982, 48123, 39001, 44044, 59678};
@@ -188,7 +211,7 @@ void CrossPointWebServer::begin() {
   LOG_DBG("WEB", "Network mode: %s", apMode ? "AP" : "STA");
 
   LOG_DBG("WEB", "Creating web server on port %d...", port);
-  server.reset(new WebServer(port));
+  server.reset(new CrossPointHttpServer(port));
 
   // Disable WiFi sleep to improve responsiveness and prevent 'unreachable' errors.
   // This is critical for reliable web server operation on ESP32.
@@ -327,6 +350,43 @@ void CrossPointWebServer::begin() {
   server->on("/api/wifi/delete", HTTP_POST, [this] {
     if (auth.authorize(*server, true, requestLanguage())) handleDeleteWifiNetwork();
   });
+
+  // SD-card plugin endpoints
+  server->on("/api/plugins", HTTP_GET, [this] {
+    if (auth.authorize(*server, true, requestLanguage())) handlePluginList();
+  });
+  server->on("/plugin", HTTP_GET, [this] {
+    if (auth.authorize(*server, true, requestLanguage())) handlePluginFile();
+  });
+  server->on("/plugins-run", HTTP_GET, [this] {
+    if (auth.authorize(*server, true, requestLanguage())) handlePluginRunnerPage();
+  });
+  server->on("/api/plugin-jobs", HTTP_POST, [this] {
+    if (auth.authorize(*server, true, requestLanguage())) handlePluginJobSubmit();
+  });
+  server->on("/api/plugin-jobs/claim", HTTP_GET, [this] {
+    if (auth.authorize(*server, true, requestLanguage())) handlePluginJobClaim();
+  });
+  server->on("/api/plugin-jobs/complete", HTTP_POST, [this] {
+    if (auth.authorize(*server, true, requestLanguage())) handlePluginJobComplete();
+  });
+  server->on("/api/plugin-jobs/status", HTTP_GET, [this] {
+    if (auth.authorize(*server, true, requestLanguage())) handlePluginJobStatus();
+  });
+  server->on("/api/relay", HTTP_POST, [this] {
+    if (auth.authorize(*server, true, requestLanguage())) handleRelay();
+  });
+  server->on("/api/fetch", HTTP_POST, [this] {
+    if (auth.authorize(*server, true, requestLanguage())) handleFetch();
+  });
+  server->on(
+      "/api/plugin-fs", HTTP_POST,
+      [this] {
+        if (auth.authorize(*server, true, requestLanguage())) handlePluginFs();
+      },
+      [this] {
+        if (auth.authorize(*server, false, requestLanguage())) handlePluginFsUpload();
+      });
 
   server->onNotFound([this] {
     if (auth.authorize(*server, true, requestLanguage())) handleNotFound();
@@ -575,6 +635,44 @@ void CrossPointWebServer::handleRoot() const {
 void CrossPointWebServer::handleJszip() const {
   sendStaticContent(server.get(), jszip_minJs, jszip_minJsCompressedSize, jszip_minJsETag, "application/javascript");
   LOG_DBG("WEB", "Served jszip.min.js");
+}
+
+void CrossPointWebServer::releaseRequestArguments() const {
+  static_cast<CrossPointHttpServer*>(server.get())->releaseRequestArguments();
+}
+
+void CrossPointWebServer::suspendTransferServices() {
+  // Leave the WebSocket server alone mid-upload; killing it would abort the transfer. The fetch just
+  // stalls that upload until it completes.
+  if (wsServer && !wsUploadInProgress) {
+    wsServer->close();
+    wsServer.reset();
+  }
+  if (udpActive) udp.stop();
+  LOG_DBG("WEB", "Transfer services suspended, heap %u, max block %u", (unsigned)ESP.getFreeHeap(),
+          (unsigned)ESP.getMaxAllocHeap());
+}
+
+void CrossPointWebServer::resumeTransferServices() {
+  if (!running) return;
+  if (!wsServer) {
+    auto* ws = new (std::nothrow) WebSocketsServer(wsPort);
+    if (ws) {
+      wsServer.reset(ws);
+      wsServer->begin();
+      wsServer->onEvent(wsEventCallback);
+    } else {
+      LOG_ERR("WEB", "OOM: WebSocket server restart");
+    }
+  }
+  if (udpActive) udpActive = udp.begin(LOCAL_UDP_PORT);
+  LOG_DBG("WEB", "Transfer services resumed, heap %u, max block %u", (unsigned)ESP.getFreeHeap(),
+          (unsigned)ESP.getMaxAllocHeap());
+}
+
+void CrossPointWebServer::handlePluginRunnerPage() const {
+  sendStaticContent(server.get(), RunnerPageHtml, sizeof(RunnerPageHtml), RunnerPageHtmlETag, "text/html");
+  LOG_DBG("WEB", "Served plugin runner page");
 }
 
 void CrossPointWebServer::handleNotFound() const {

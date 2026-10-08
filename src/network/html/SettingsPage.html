@@ -304,6 +304,7 @@
 
   <div id="wifi-container"></div>
   <div id="opds-container"></div>
+  <div id="plugin-container"></div>
 
   <footer class="tenor-footer"><span data-i18n="home.footerLibrary">Thư viện trên thiết bị</span><a href="https://cross.tenor.vn" target="_blank" rel="noopener noreferrer">cross.tenor.vn ↗</a></footer>
 
@@ -855,10 +856,13 @@
     }
   });
 
+<!--#include file="shared/PluginHost.js.inc" -->
+
   (async () => {
     await loadSettings();
     await loadWifiNetworks();
     await loadOpdsServers();
+    await loadPlugins('settings');
   })();
 </script>
 </body>

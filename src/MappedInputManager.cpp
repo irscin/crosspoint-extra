@@ -64,6 +64,11 @@ uint8_t MappedInputManager::physicalBack() const { return SETTINGS.frontButtonBa
 
 bool MappedInputManager::mapButton(const Button button, bool (HalGPIO::*fn)(uint8_t) const) const {
   const auto sideLayout = SETTINGS.sideButtonLayout;
+  // The user's "swap side buttons" choice flips the two side buttons for every logical role at once.
+  const auto side = [](const uint8_t physical) -> uint8_t {
+    if (!SETTINGS.sideButtonsSwapped) return physical;
+    return physical == HalGPIO::BTN_UP ? HalGPIO::BTN_DOWN : physical == HalGPIO::BTN_DOWN ? HalGPIO::BTN_UP : physical;
+  };
 
   switch (button) {
     case Button::Back:
@@ -80,10 +85,10 @@ bool MappedInputManager::mapButton(const Button button, bool (HalGPIO::*fn)(uint
       return (gpio.*fn)(SETTINGS.frontButtonRight);
     case Button::Up:
       // Side buttons remain fixed for Up/Down.
-      return (gpio.*fn)(HalGPIO::BTN_UP);
+      return (gpio.*fn)(side(HalGPIO::BTN_UP));
     case Button::Down:
       // Side buttons remain fixed for Up/Down.
-      return (gpio.*fn)(HalGPIO::BTN_DOWN);
+      return (gpio.*fn)(side(HalGPIO::BTN_DOWN));
     case Button::Power:
       // Power button bypasses remapping.
       return (gpio.*fn)(HalGPIO::BTN_POWER);
@@ -91,9 +96,9 @@ bool MappedInputManager::mapButton(const Button button, bool (HalGPIO::*fn)(uint
       // Reader page navigation uses side buttons and can be swapped via settings.
       switch (sideLayout) {
         case CrossPointSettings::PREV_NEXT:
-          return (gpio.*fn)(isNavDirectionSwapped() ? HalGPIO::BTN_DOWN : HalGPIO::BTN_UP);
+          return (gpio.*fn)(side(isNavDirectionSwapped() ? HalGPIO::BTN_DOWN : HalGPIO::BTN_UP));
         case CrossPointSettings::NEXT_PREV:
-          return (gpio.*fn)(isNavDirectionSwapped() ? HalGPIO::BTN_UP : HalGPIO::BTN_DOWN);
+          return (gpio.*fn)(side(isNavDirectionSwapped() ? HalGPIO::BTN_UP : HalGPIO::BTN_DOWN));
         case CrossPointSettings::NEXT_NEXT:
         case CrossPointSettings::SIDE_BUTTONS_DISABLED:
         default:
@@ -103,13 +108,13 @@ bool MappedInputManager::mapButton(const Button button, bool (HalGPIO::*fn)(uint
       // Reader page navigation uses side buttons and can be swapped via settings.
       switch (sideLayout) {
         case CrossPointSettings::PREV_NEXT:
-          return (gpio.*fn)(isNavDirectionSwapped() ? HalGPIO::BTN_UP : HalGPIO::BTN_DOWN);
+          return (gpio.*fn)(side(isNavDirectionSwapped() ? HalGPIO::BTN_UP : HalGPIO::BTN_DOWN));
         case CrossPointSettings::NEXT_PREV:
-          return (gpio.*fn)(isNavDirectionSwapped() ? HalGPIO::BTN_DOWN : HalGPIO::BTN_UP);
+          return (gpio.*fn)(side(isNavDirectionSwapped() ? HalGPIO::BTN_DOWN : HalGPIO::BTN_UP));
         case CrossPointSettings::NEXT_NEXT:
           // Both edge buttons turn forward: readers who hold the device either
           // way keep one thumb on "next" without thinking about which side.
-          return (gpio.*fn)(HalGPIO::BTN_UP) || (gpio.*fn)(HalGPIO::BTN_DOWN);
+          return (gpio.*fn)(side(HalGPIO::BTN_UP)) || (gpio.*fn)(side(HalGPIO::BTN_DOWN));
         case CrossPointSettings::SIDE_BUTTONS_DISABLED:
         default:
           return false;

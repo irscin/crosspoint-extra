@@ -15,12 +15,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -89,13 +90,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -164,12 +166,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -239,13 +242,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -315,12 +319,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -389,13 +394,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -464,12 +470,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -539,13 +546,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -617,12 +625,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -693,13 +702,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -770,12 +780,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -847,13 +858,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -925,12 +937,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -1001,13 +1014,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -1078,12 +1092,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -1155,13 +1170,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -1231,12 +1247,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -1293,13 +1310,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -1356,12 +1374,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -1419,13 +1438,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -1483,12 +1503,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -1545,13 +1566,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -1608,12 +1630,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -1671,13 +1694,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -1737,12 +1761,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -1801,13 +1826,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -1866,12 +1892,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -1931,13 +1958,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -1997,12 +2025,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -2061,13 +2090,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -2126,12 +2156,13 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -2191,13 +2222,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_REMAP_FRONT_BUTTONS:1:",
       "STR_FRONT_BTN_FOLLOW_ORIENTATION:0:frontButtonFollowOrientation",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -2254,13 +2286,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -2317,7 +2350,6 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
@@ -2325,6 +2357,8 @@
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -2381,13 +2415,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -2445,7 +2480,6 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
@@ -2453,6 +2487,8 @@
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -2510,13 +2546,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -2573,7 +2610,6 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
@@ -2581,6 +2617,8 @@
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -2637,13 +2675,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -2701,7 +2740,6 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
@@ -2709,6 +2747,8 @@
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -2768,13 +2808,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -2833,7 +2874,6 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
@@ -2841,6 +2881,8 @@
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -2899,13 +2941,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -2965,7 +3008,6 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
@@ -2973,6 +3015,8 @@
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -3032,13 +3076,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -3097,7 +3142,6 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
@@ -3105,6 +3149,8 @@
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn"
@@ -3163,13 +3209,14 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_CUSTOMISE_STATUS_BAR:2:"
     ],
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",
@@ -3229,7 +3276,6 @@
       "STR_ORIENTATION:0:orientation",
       "STR_IMAGES:0:imageRendering",
       "STR_HIDE_READER_STATUS_BAR:0:readerStatusBarMode",
-      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
       "STR_READER_MENU_STYLE:0:readerMenuStyle",
       "STR_DICTIONARY:0:",
       "STR_CUSTOMISE_STATUS_BAR:2:"
@@ -3237,6 +3283,8 @@
     [
       "STR_TOUCH_READER_CONTROLS:0:touchReaderControls",
       "STR_SHOW_READER_MENU:0:tapForReaderMenu",
+      "STR_SIDE_BTN_LAYOUT:0:sideButtonLayout",
+      "STR_SIDE_BTNS_SWAP:0:sideButtonsSwapped",
       "STR_LONG_PRESS_BEHAVIOR:0:longPressButtonBehavior",
       "STR_LONG_PRESS_MENU:0:longPressMenuFunction",
       "STR_SHORT_PWR_BTN:0:shortPwrBtn",

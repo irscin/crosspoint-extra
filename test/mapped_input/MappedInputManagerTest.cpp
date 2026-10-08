@@ -94,6 +94,63 @@ std::string buildMappingTable() {
   return out.str();
 }
 
+// "Swap side buttons": the two side buttons trade roles in menus and in the reader, and only those.
+TEST(MappedInputSideSwap, SwapFlipsMenuAndPageTurnButtons) {
+  HalGPIO gpio;
+  GfxRenderer renderer(hostTestDisplay());
+  MappedInputManager input(gpio, renderer);
+  using Button = MappedInputManager::Button;
+  SETTINGS.frontButtonFollowOrientation = 0;
+  SETTINGS.sideButtonLayout = CrossPointSettings::PREV_NEXT;
+
+  const auto pressedAs = [&](const bool swapped, const uint8_t hardware, const Button logical) {
+    SETTINGS.sideButtonsSwapped = swapped ? 1 : 0;
+    faketest::reset();
+    faketest::pressed[hardware] = true;
+    return input.wasPressed(logical);
+  };
+
+  // Default: top (UP) is Up / previous page, bottom (DOWN) is Down / next page.
+  EXPECT_TRUE(pressedAs(false, HalGPIO::BTN_UP, Button::Up));
+  EXPECT_TRUE(pressedAs(false, HalGPIO::BTN_DOWN, Button::Down));
+  EXPECT_TRUE(pressedAs(false, HalGPIO::BTN_UP, Button::PageBack));
+  EXPECT_TRUE(pressedAs(false, HalGPIO::BTN_DOWN, Button::PageForward));
+  EXPECT_TRUE(pressedAs(false, HalGPIO::BTN_DOWN, Button::NavNext));
+  EXPECT_TRUE(pressedAs(false, HalGPIO::BTN_UP, Button::NavPrevious));
+
+  // Swapped: the same physical buttons do the opposite job, in menus and in books alike.
+  EXPECT_TRUE(pressedAs(true, HalGPIO::BTN_DOWN, Button::Up));
+  EXPECT_TRUE(pressedAs(true, HalGPIO::BTN_UP, Button::Down));
+  EXPECT_FALSE(pressedAs(true, HalGPIO::BTN_UP, Button::Up));
+  EXPECT_TRUE(pressedAs(true, HalGPIO::BTN_DOWN, Button::PageBack));
+  EXPECT_TRUE(pressedAs(true, HalGPIO::BTN_UP, Button::PageForward));
+  EXPECT_TRUE(pressedAs(true, HalGPIO::BTN_UP, Button::NavNext));
+  EXPECT_TRUE(pressedAs(true, HalGPIO::BTN_DOWN, Button::NavPrevious));
+
+  // The front buttons and Power are not touched.
+  EXPECT_TRUE(pressedAs(true, HalGPIO::BTN_POWER, Button::Power));
+  EXPECT_TRUE(pressedAs(true, HalGPIO::BTN_CONFIRM, Button::Confirm));
+
+  SETTINGS.sideButtonsSwapped = 0;
+}
+
+TEST(MappedInputSideSwap, SwapAndReaderLayoutCombine) {
+  HalGPIO gpio;
+  GfxRenderer renderer(hostTestDisplay());
+  MappedInputManager input(gpio, renderer);
+  using Button = MappedInputManager::Button;
+  SETTINGS.frontButtonFollowOrientation = 0;
+  SETTINGS.sideButtonLayout = CrossPointSettings::NEXT_PREV;
+  SETTINGS.sideButtonsSwapped = 1;
+  // Two flips cancel for page turns (the reader layout and the global swap), menus still flip once.
+  faketest::reset();
+  faketest::pressed[HalGPIO::BTN_DOWN] = true;
+  EXPECT_TRUE(input.wasPressed(Button::PageForward));
+  EXPECT_TRUE(input.wasPressed(Button::Up));
+  SETTINGS.sideButtonsSwapped = 0;
+  SETTINGS.sideButtonLayout = CrossPointSettings::PREV_NEXT;
+}
+
 TEST(MappedInputSafetyNet, NhanPhimKhopVoiViecNutDoLam) {
   const struct {
     uint8_t back, confirm, left, right;

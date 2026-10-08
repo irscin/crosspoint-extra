@@ -123,6 +123,8 @@ STR_EOB_HOME: "Home"
 STR_EOB_CONTINUE_WITH: "Continue with"
 STR_SHORT_PWR_BTN: "Short Power Button Click"
 STR_ORIENTATION: "Reading Orientation"
+STR_SIDE_BTNS_SWAP: "Swap side buttons (all screens)"
+
 STR_SIDE_BTN_LAYOUT: "Side buttons for page turns"
 STR_TOUCH_READER_CONTROLS: "Touch Reader Controls"
 STR_SHOW_READER_MENU: "Show Reader Menu"

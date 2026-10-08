@@ -268,11 +268,11 @@ inline const std::vector<SettingInfo>& getBaseSettingsList() {
     statusBarClockValues[CrossPointSettings::STATUS_BAR_CLOCK_LEFT] = StrId::STR_DIR_LEFT;
 
     const bool hasTilt = halTiltSensor.isAvailable();
-    // 70 unconditional descriptors; the IMU branch adds the Motion sensor tab: reader,
+    // 71 unconditional descriptors; the IMU branch adds the Motion sensor tab: reader,
     // tab and row tilt, the two flick strengths, the two hard shake rows, face down, face up
     // and double tap.
     // Cold-catalog tests cover each capability branch and the IMU variant.
-    constexpr size_t fixedCount = 70
+    constexpr size_t fixedCount = 71
 #if defined(FREEINK_CAP_FRONTLIGHT) && FREEINK_CAP_FRONTLIGHT
                                   + 1
 #endif
@@ -407,9 +407,6 @@ inline const std::vector<SettingInfo>& getBaseSettingsList() {
                            StrId::STR_STATUS_BAR_CHAPTER_PROGRESS, StrId::STR_STATUS_BAR_CHAPTER_CLOCK,
                            StrId::STR_STATUS_BAR_CHAPTER_BATTERY},
                           "readerStatusBarMode", StrId::STR_CAT_READER));
-    v.push_back(SettingInfo::Enum(StrId::STR_SIDE_BTN_LAYOUT, &CrossPointSettings::sideButtonLayout,
-                          {StrId::STR_PREV_NEXT, StrId::STR_NEXT_PREV, StrId::STR_DISABLED, StrId::STR_NEXT_NEXT},
-                          "sideButtonLayout", StrId::STR_CAT_READER));
     v.push_back(SettingInfo::Enum(StrId::STR_READER_MENU_STYLE, &CrossPointSettings::readerMenuStyle,
                           {StrId::STR_MENU_STYLE_LIST, StrId::STR_MENU_STYLE_TOOLBAR}, "readerMenuStyle",
                           StrId::STR_CAT_READER));
@@ -425,6 +422,14 @@ inline const std::vector<SettingInfo>& getBaseSettingsList() {
                           StrId::STR_CAT_CONTROLS));
     v.push_back(SettingInfo::Toggle(StrId::STR_FRONT_BTN_FOLLOW_ORIENTATION, &CrossPointSettings::frontButtonFollowOrientation,
                             "frontButtonFollowOrientation", StrId::STR_CAT_CONTROLS));
+    // Moved here from the Reader tab: it is a button setting. The key is unchanged, so saved choices carry over.
+    v.push_back(SettingInfo::Enum(StrId::STR_SIDE_BTN_LAYOUT, &CrossPointSettings::sideButtonLayout,
+                          {StrId::STR_PREV_NEXT, StrId::STR_NEXT_PREV, StrId::STR_DISABLED, StrId::STR_NEXT_NEXT},
+                          "sideButtonLayout", StrId::STR_CAT_CONTROLS));
+    // Whole-interface counterpart of the row above: flips which physical side button is Up and which is Down
+    // in every menu and list, and which one turns the page in a book.
+    v.push_back(SettingInfo::Toggle(StrId::STR_SIDE_BTNS_SWAP, &CrossPointSettings::sideButtonsSwapped,
+                            "sideButtonsSwapped", StrId::STR_CAT_CONTROLS));
     v.push_back(SettingInfo::Enum(StrId::STR_KEYBOARD_GEOMETRY, &CrossPointSettings::keyboardAligned,
                           {StrId::STR_KEYBOARD_STAGGERED, StrId::STR_KEYBOARD_ALIGNED}, "keyboardAligned",
                           StrId::STR_CAT_KEYBOARD));

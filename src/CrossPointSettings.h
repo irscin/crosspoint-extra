@@ -321,6 +321,8 @@ class CrossPointSettings : public PersistableStore<CrossPointSettings> {
   uint8_t frontButtonLayout = BACK_CONFIRM_LEFT_RIGHT;
   uint8_t sideButtonLayout = PREV_NEXT;
   uint8_t frontButtonFollowOrientation = 0;
+  // Swaps the two side buttons everywhere: menus and lists (Up/Down) and reader page turns.
+  uint8_t sideButtonsSwapped = 0;
   uint8_t keyboardAxisSwapped = 1;
   uint8_t keyboardAligned = 1;
   // Ten thiet bi do nguoi dung dat, dung cho hostname Wi-Fi, ten mDNS va ten

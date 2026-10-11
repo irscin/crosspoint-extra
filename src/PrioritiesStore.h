@@ -6,15 +6,15 @@
 
 // Today's priorities: a short checklist read from /.crosspoint/priorities.json.
 //
-// Item fields and limits mirror Flowe's priorities snapshot (id, title, note,
-// done; up to 10 items) so a phone sync can later fill the same list. Until
-// then the file is the only source: items are edited on the SD card, and the
-// device only flips `done`, writing the file back.
+// Each item has an id, a title, a note and a done flag; the list holds up to
+// CAPACITY items. The phone app edits it over BLE (util/TaskSync.h) and it can
+// also be edited on the SD card; on its own the device only flips `done`,
+// writing the file back.
 //
 //   {"version":1,"items":[{"id":"a1","title":"Write report","note":"","done":false}]}
 class PrioritiesStore {
  public:
-  static constexpr size_t CAPACITY = 10;
+  static constexpr size_t CAPACITY = 40;
   static constexpr size_t MAX_ID = 64;
   static constexpr size_t MAX_TITLE = 96;
   static constexpr size_t MAX_NOTE = 120;

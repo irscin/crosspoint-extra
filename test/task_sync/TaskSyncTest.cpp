@@ -162,7 +162,7 @@ TEST_F(TaskSyncCommands, ListReturnsSnapshotAndCapacity) {
   const auto doc = parse(tasksync::handleRequest(store, session, R"({"cmd":"list"})"));
   EXPECT_TRUE(doc["ok"].as<bool>());
   EXPECT_EQ(doc["v"].as<int>(), 1);
-  EXPECT_EQ(doc["cap"].as<int>(), 10);
+  EXPECT_EQ(doc["cap"].as<int>(), 40);
   EXPECT_EQ(doc["items"].size(), 2u);
   EXPECT_EQ(doc["items"][1]["done"].as<bool>(), true);
 }
@@ -182,10 +182,10 @@ TEST_F(TaskSyncCommands, AddRejectsBlankTitleAndFullList) {
   auto doc = parse(tasksync::handleRequest(store, session, R"({"cmd":"add","title":""})"));
   EXPECT_FALSE(doc["ok"].as<bool>());
   EXPECT_STREQ(doc["err"], "bad_request");
-  for (int i = 0; i < 8; ++i) tasksync::handleRequest(store, session, R"({"cmd":"add","title":"x"})");
+  for (int i = 0; i < 38; ++i) tasksync::handleRequest(store, session, R"({"cmd":"add","title":"x"})");
   doc = parse(tasksync::handleRequest(store, session, R"({"cmd":"add","title":"overflow"})"));
   EXPECT_STREQ(doc["err"], "full");
-  EXPECT_EQ(doc["items"].size(), 10u);  // snapshot still comes back
+  EXPECT_EQ(doc["items"].size(), 40u);  // snapshot still comes back
 }
 
 TEST_F(TaskSyncCommands, ToggleAndDeleteById) {
@@ -238,7 +238,7 @@ TEST_F(TaskSyncCommands, SetIsAllOrNothing) {
   EXPECT_STREQ(doc["err"], "bad_request");
   EXPECT_EQ(doc["items"].size(), 2u);  // unchanged
   std::string many = R"({"cmd":"set","items":[)";
-  for (int i = 0; i < 11; ++i) many += std::string(i ? "," : "") + R"({"title":"x"})";
+  for (size_t i = 0; i < PrioritiesStore::CAPACITY + 1; ++i) many += std::string(i ? "," : "") + R"({"title":"x"})";
   many += "]}";
   doc = parse(tasksync::handleRequest(store, session, many));
   EXPECT_STREQ(doc["err"], "full");

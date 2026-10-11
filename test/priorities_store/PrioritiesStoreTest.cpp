@@ -26,9 +26,9 @@ TEST(PrioritiesStore, RejectsInvalidAndKeepsPreviousList) {
   EXPECT_EQ(store.items().size(), 1u);
 }
 
-TEST(PrioritiesStore, SkipsUntitledAndCapsAtTen) {
+TEST(PrioritiesStore, SkipsUntitledAndCapsAtCapacity) {
   std::string json = R"({"items":[{"id":"x","title":""})";
-  for (int i = 0; i < 14; ++i) json += R"(,{"id":"i","title":"T"})";
+  for (int i = 0; i < 45; ++i) json += R"(,{"id":"i","title":"T"})";
   json += "]}";
   PrioritiesStore store;
   ASSERT_TRUE(store.parse(json));

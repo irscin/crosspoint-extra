@@ -13,8 +13,9 @@ class PrioritiesStore;
 namespace tasksync {
 
 constexpr int PROTOCOL_VERSION = 1;
-// Largest request or response, reassembled. Ten tasks with full-length ids, titles and notes fit.
-constexpr size_t MAX_MESSAGE = 4096;
+// Largest request or response, reassembled. Forty tasks with full-length ids, titles and notes fit,
+// with headroom: about 10.5 KB as a "set" request or as a snapshot response.
+constexpr size_t MAX_MESSAGE = 16384;
 
 // One BLE write or notification carries one frame: a header byte, then payload.
 // A message that fits one frame has both FIRST and LAST set.
@@ -76,7 +77,7 @@ struct Session {
 // {"cmd":"toggle","id":"..","done":true}, {"cmd":"delete","id":".."},
 // {"cmd":"set","items":[{"id":"..","title":"..","note":"..","done":false}]} (replaces the list).
 // Every response carries the current list, so the app resyncs from any reply:
-//   {"v":1,"ok":true,"cap":10,"items":[{"id":..,"title":..,"note":..,"done":..}]}
+//   {"v":1,"ok":true,"cap":40,"items":[{"id":..,"title":..,"note":..,"done":..}]}
 //   {"v":1,"ok":false,"err":"full|not_found|bad_request|save_failed|unauthorized|bad_code", ...}
 std::string handleRequest(PrioritiesStore& store, Session& session, const std::string& request);
 

@@ -58,7 +58,7 @@ The device requests ATT MTU 185. Frames are sized from the negotiated MTU
 
 ## Framing
 
-A message is a UTF-8 JSON document of at most 4096 bytes. Each write or
+A message is a UTF-8 JSON document of at most 16384 bytes. Each write or
 notification carries one frame: a header byte followed by payload.
 
 | Header bit | Meaning |
@@ -67,7 +67,7 @@ notification carries one frame: a header byte followed by payload.
 | `0x02` | last frame of a message |
 
 A message that fits one frame has header `0x03`. A frame that is not `FIRST`
-while no message is open, or one that would push the message past 4096 bytes,
+while no message is open, or one that would push the message past 16384 bytes,
 is dropped, and the next `FIRST` frame starts clean. Reference implementations:
 `src/util/TaskSync.cpp` (device) and `services/task-protocol.ts` (app).
 
@@ -91,7 +91,7 @@ Its reply is the normal snapshot (so it doubles as the first `list`). After that
 
 `set` is what the app's **Send to Device** uses: it replaces the whole list, in
 the order given. Items keep their `id` when it is non-empty and unique; others
-get a fresh `t<n>`. It is all-or-nothing: more than 10 items (`full`) or any
+get a fresh `t<n>`. It is all-or-nothing: more than 40 items (`full`) or any
 blank title (`bad_request`) changes nothing.
 
 `title` is required (96 bytes max, `note` 120), longer values are cut on a
@@ -102,11 +102,11 @@ character boundary. Ids are assigned by the device (`t<n>`).
 Every request gets one response containing the whole list, success or not:
 
 ```json
-{"v":1,"ok":true,"cap":10,"items":[{"id":"t1","title":"Write report","note":"","done":false}]}
-{"v":1,"ok":false,"err":"full","cap":10,"items":[ ... ]}
+{"v":1,"ok":true,"cap":40,"items":[{"id":"t1","title":"Write report","note":"","done":false}]}
+{"v":1,"ok":false,"err":"full","cap":40,"items":[ ... ]}
 ```
 
-`err` is one of `full` (10 tasks already), `not_found`, `bad_request`,
+`err` is one of `full` (40 tasks already), `not_found`, `bad_request`,
 `save_failed` (SD write failed; the change is rolled back), `unauthorized` (no
 successful `auth` yet) or `bad_code`. The last two always carry an empty list.
 

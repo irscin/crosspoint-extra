@@ -3,6 +3,8 @@
 #include <Logging.h>
 #include <WiFi.h>
 #include <esp_sntp.h>
+
+#include <cstdio>
 #include <sys/time.h>
 #include <time.h>
 
@@ -102,8 +104,31 @@ bool HalClock::syncFromNTP() {
     return false;
   }
 
+  // SNTP gets the servers as IP addresses, resolved here first. Given host names, SNTP keeps a DNS
+  // query in flight; the first HTTPS lookup after a join (NetworkManager::hostByName) clears the DNS
+  // cache from the calling task without the lwIP core lock, which fires that query's callback there,
+  // and SNTP's retry allocates a UDP pcb unlocked: "udp_new_ip_type ... Required to lock TCPIP core"
+  // (plugin request right after a join, 11/10/2026). With IP literals SNTP never queries DNS.
+  // sntp_setservername keeps the pointers, so the text lives in static storage.
+  static char servers[2][46];  // room for an IPv6 address
+  const char* const names[2] = {"pool.ntp.org", "time.nist.gov"};
+  int resolved = 0;
+  for (const char* name : names) {
+    IPAddress ip;
+    if (WiFi.hostByName(name, ip) == 1 && ip != IPAddress(static_cast<uint32_t>(0))) {
+      snprintf(servers[resolved], sizeof(servers[resolved]), "%s", ip.toString().c_str());
+      ++resolved;
+    } else {
+      LOG_ERR("CLK", "Could not resolve %s", name);
+    }
+  }
+  if (resolved == 0) {
+    LOG_ERR("CLK", "No NTP server resolved");
+    return false;
+  }
+
   LOG_INF("CLK", "Starting NTP sync...");
-  configTzTime("UTC0", "pool.ntp.org", "time.nist.gov");
+  configTzTime("UTC0", servers[0], resolved > 1 ? servers[1] : nullptr);
 
   // Wait for SNTP sync to complete (up to 5 seconds)
   constexpr int maxAttempts = 50;

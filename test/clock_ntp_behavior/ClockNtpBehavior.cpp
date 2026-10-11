@@ -11,7 +11,8 @@
 #include <vector>
 
 namespace fake {
-bool rtc = false, rtcReadable = false, rtcWritable = true, wifi = true, ntpResponds = true;
+bool rtc = false, rtcReadable = false, rtcWritable = true, wifi = true, ntpResponds = true, dnsResolves = true;
+std::string ntpServer1, ntpServer2;
 time_t epoch = 0, ntpEpoch = 1789819200;
 unsigned long ms = 0;
 int ntpCalls = 0, rtcWrites = 0, tlsBegins = 0;
@@ -20,7 +21,9 @@ Rtc::DateTime stored;
 std::string logs;
 void reset() {
   rtc = rtcReadable = false;
-  rtcWritable = wifi = ntpResponds = true;
+  rtcWritable = wifi = ntpResponds = dnsResolves = true;
+  ntpServer1.clear();
+  ntpServer2.clear();
   epoch = 0;
   ntpEpoch = 1789819200;
   ms = 1;
@@ -33,7 +36,11 @@ void reset() {
 }
 unsigned long millis() { return fake::ms; }
 void delay(unsigned long ms) { fake::ms += ms; }
-void configTzTime(const char*, const char*, const char*) { ++fake::ntpCalls; }
+void configTzTime(const char*, const char* server1, const char* server2) {
+  ++fake::ntpCalls;
+  fake::ntpServer1 = server1 ? server1 : "";
+  fake::ntpServer2 = server2 ? server2 : "";
+}
 int sntp_get_sync_status() {
   if (!fake::ntpResponds) return 0;
   fake::epoch = fake::ntpEpoch;
@@ -57,6 +64,11 @@ bool Rtc::set(const DateTime& dt) {
 }
 WiFiClass WiFi;
 int WiFiClass::status() const { return fake::wifi ? WL_CONNECTED : 0; }
+int WiFiClass::hostByName(const char* host, IPAddress& out) const {
+  if (!fake::dnsResolves) return 0;
+  out = IPAddress(std::string(host) == "pool.ntp.org" ? 0xC0000201u : 0xC0000202u);
+  return 1;
+}
 void testLog(const char*, const char* format, ...) {
   char text[512];
   va_list args;
@@ -133,6 +145,18 @@ void goodRtcWrite() {
   CHECK(fake::rtcWrites == 1 && fake::stored.year == 2026);
   CHECK(fake::stored.month == 9 && fake::stored.day == 19);
   CHECK(fake::tlsBegins == 1 && fake::caConfigured);
+}
+// SNTP is given IP literals, resolved beforehand: with host names it keeps a DNS query in flight
+// that an unlocked dns_clear_cache() (first HTTPS lookup after a join) turns into a crash.
+void ntpServersAreAddresses() {
+  ++cases; fake::reset(); halClock.begin();
+  CHECK(halClock.syncFromNTP());
+  CHECK(fake::ntpServer1 == "192.0.2.1" && fake::ntpServer2 == "192.0.2.2");
+}
+void ntpDnsFailureSkipsSntp() {
+  ++cases; fake::reset(); fake::dnsResolves = false; halClock.begin();
+  CHECK(!halClock.syncFromNTP());
+  CHECK(fake::ntpCalls == 0);
 }
 void ntpTimeout() {
   ++cases; fake::reset(); fake::ntpResponds = false; halClock.begin();
@@ -269,6 +293,7 @@ void failedSyncRetainsWorkingClock() {
 }
 int main() {
   noRtcColdBoot(); failedRtcReadAndWrite(); goodRtcWrite(); ntpTimeout(); wifiDisconnected();
+  ntpServersAreAddresses(); ntpDnsFailureSkipsSntp();
   invalidCompletedEpoch(); alreadyValidEpoch();
   noRtcDisplayAfterNtp(); offlineMidnightAndRetainedWake(); fullPowerLossStaysUnknown();
   failedRtcWriteUsesFreshSystemTime(); rtcReadFailureKeepsTimeAdvancing();

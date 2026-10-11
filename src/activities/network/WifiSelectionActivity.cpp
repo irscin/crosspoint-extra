@@ -6,10 +6,15 @@
 #include <HalPowerManager.h>
 #include <I18n.h>
 #include <Logging.h>
+#include <CredentialIntegrity.h>
+#include <HalStorage.h>
 #include <WiFi.h>
 #include <esp_mac.h>
 
 #include <algorithm>
+#include <atomic>
+#include <cstdio>
+#include <cstring>
 
 #include "CrossPointSettings.h"
 #include "DeviceName.h"
@@ -23,6 +28,22 @@
 #include "util/PluginEvents.h"
 
 namespace fui = freeink::ui;
+
+namespace {
+// The driver's reason for the last station disconnect (wifi_err_reason_t), 0 = none since the
+// attempt began. "General failure" alone could not tell a refused key (15, 204) from an AP that
+// would not take the client (2, 205, 210), so the failure screen and the attempt log carry it.
+std::atomic<uint16_t> lastDisconnectReason{0};
+void onStaDisconnected(arduino_event_t* event) {
+  lastDisconnectReason.store(event->event_info.wifi_sta_disconnected.reason);
+}
+
+// One line per join attempt on the card, to compare a saved-password attempt with a typed one
+// without a serial cable. The password itself is never written: only its length and the CRC32
+// that wifi.json already keeps next to it.
+constexpr char CONNECT_LOG[] = "/.crosspoint/wifi-log.txt";
+constexpr size_t CONNECT_LOG_MAX_BYTES = 8 * 1024;
+}  // namespace
 
 namespace {
 constexpr fui::ActionId ACTION_ROW = 1;
@@ -102,6 +123,7 @@ void WifiSelectionActivity::onPromptEvent(const fui::ActionEvent& event, void* u
 }
 
 void WifiSelectionActivity::onEnter() {
+  WiFi.onEvent(onStaDisconnected, ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
   runtimeStarted = false;
   wifiConnectionHandedOff = false;
   completionWaitingForBackRelease = false;
@@ -208,6 +230,7 @@ bool WifiSelectionActivity::giveUpBeforeAsking() {
 }
 
 void WifiSelectionActivity::onExit() {
+  WiFi.removeEvent(onStaDisconnected, ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
   Activity::onExit();
 
   if (runtimeStarted) {
@@ -598,6 +621,27 @@ void WifiSelectionActivity::showNetworkListFromAutoConnect() {
   requestUpdate();
 }
 
+void WifiSelectionActivity::logConnectAttempt(const char* outcome, const int status) {
+  char line[160];
+  snprintf(line, sizeof(line), "t=%lu ssid=\"%s\" source=%s auto=%u sentPassword=%u len=%u crc=%08lx status=%d reason=%u %s\n",
+           millis(), selectedSSID.c_str(), usedSavedPassword ? "saved" : "typed", autoConnecting ? 1u : 0u,
+           (selectedRequiresPassword && !enteredPassword.empty()) ? 1u : 0u,
+           static_cast<unsigned>(enteredPassword.size()),
+           static_cast<unsigned long>(credential_integrity::crc32(enteredPassword)), status,
+           static_cast<unsigned>(lastDisconnectReason.load()), outcome);
+  RenderLock lock(*this);
+  HalFile file = Storage.open(CONNECT_LOG, O_WRONLY | O_CREAT | O_APPEND);
+  if (!file || !file.isOpen()) return;
+  if (file.fileSize() > CONNECT_LOG_MAX_BYTES) {
+    file.close();
+    Storage.remove(CONNECT_LOG);
+    file = Storage.open(CONNECT_LOG, O_WRONLY | O_CREAT | O_APPEND);
+    if (!file || !file.isOpen()) return;
+  }
+  file.write(reinterpret_cast<const uint8_t*>(line), strlen(line));
+  file.flush();
+}
+
 void WifiSelectionActivity::attemptConnection() {
   state = autoConnecting ? WifiSelectionState::AUTO_CONNECTING : WifiSelectionState::CONNECTING;
   connectionStartTime = millis();
@@ -633,6 +677,7 @@ void WifiSelectionActivity::attemptConnection() {
     LOG_ERR("WIFI", "Failed to read station MAC for hostname (err=%d)", static_cast<int>(macResult));
   }
 
+  lastDisconnectReason.store(0);
   if (selectedRequiresPassword && !enteredPassword.empty()) {
     WiFi.begin(selectedSSID.c_str(), enteredPassword.c_str());
   } else {
@@ -654,6 +699,7 @@ void WifiSelectionActivity::checkConnectionStatus() {
     char ipStr[16];
     snprintf(ipStr, sizeof(ipStr), "%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3]);
     connectedIP = ipStr;
+    logConnectAttempt("connected", static_cast<int>(status));
     autoConnecting = false;
 
 #if defined(ENABLE_SERIAL_LOG) && LOG_LEVEL >= 2
@@ -723,6 +769,12 @@ void WifiSelectionActivity::checkConnectionStatus() {
     if (status == WL_NO_SSID_AVAIL) {
       connectionError = tr(STR_ERROR_NETWORK_NOT_FOUND);
     }
+    if (const uint16_t reason = lastDisconnectReason.load()) {
+      char suffix[24];
+      snprintf(suffix, sizeof(suffix), " (reason %u)", static_cast<unsigned>(reason));
+      connectionError += suffix;
+    }
+    logConnectAttempt("failed", static_cast<int>(status));
     if (autoConnecting) {
       handleAutoConnectFailure();
       return;
@@ -738,6 +790,7 @@ void WifiSelectionActivity::checkConnectionStatus() {
   if (millis() - connectionStartTime > timeoutMs) {
     LOG_INF("WIFI", "Connection timed out after %lu ms, status %d", timeoutMs, static_cast<int>(status));
     connectionError = tr(STR_ERROR_CONNECTION_TIMEOUT);
+    logConnectAttempt("timeout", static_cast<int>(status));
     if (autoConnecting) {
       handleAutoConnectFailure();
       return;

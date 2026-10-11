@@ -76,6 +76,8 @@ class WifiSelectionActivity final : public Activity, private UiAppHost {
   // Connection result
   std::string connectedIP;
   std::string connectionError;
+  // Appends this attempt to /.crosspoint/wifi-log.txt (see the .cpp; never the password).
+  void logConnectAttempt(const char* outcome, int status);
 
   // Password to potentially save (from keyboard or saved credentials)
   std::string enteredPassword;

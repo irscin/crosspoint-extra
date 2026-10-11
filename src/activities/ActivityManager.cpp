@@ -301,6 +301,10 @@ HomeMenuItem ActivityManager::homeMenuOrigin() const {
       return HomeMenuItem::SETTINGS_MENU;
     case 4:
       return HomeMenuItem::FAVORITES_TAB;
+    case 5:
+      return HomeMenuItem::PLUGINS_TAB;
+    case 6:
+      return HomeMenuItem::PRIORITIES_TAB;
     default:
       return HomeMenuItem::RECENTS;
   }

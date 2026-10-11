@@ -229,6 +229,10 @@ class CrossPointSettings : public PersistableStore<CrossPointSettings> {
   // "tapForReaderMenu" key: 0/1 keep their old Off/Tap meaning.
   enum SHOW_READER_MENU { READER_MENU_OFF = 0, READER_MENU_TAP = 1, READER_MENU_SWIPE_UP = 2, SHOW_READER_MENU_COUNT };
 
+  // "Wake into the book": Home, the last book, or wherever sleep began (the book from the reader,
+  // else the Home tab that was on screen).
+  enum WAKE_INTO_BOOK { WAKE_HOME = 0, WAKE_BOOK = 1, WAKE_WHERE_LEFT_OFF = 2, WAKE_INTO_BOOK_COUNT };
+
   enum QUICK_RESUME_SLEEP_SCREEN {
     QUICK_RESUME_NEVER = 0,
     QUICK_RESUME_AFTER_TIMEOUT = 1,
@@ -465,9 +469,8 @@ class CrossPointSettings : public PersistableStore<CrossPointSettings> {
   uint16_t keyboardLayouts = 0;
   // Quick Resume: keep current content visible with moon icon instead of showing a static sleep screen.
   uint8_t quickResumeSleepScreen = QUICK_RESUME_NEVER;
-  // Wake straight back into the book that was open when deep sleep began,
-  // instead of returning to Home. 0 = off, 1 = on.
-  uint8_t wakeIntoBook = 0;
+  // Where a wake from deep sleep lands, see WAKE_INTO_BOOK.
+  uint8_t wakeIntoBook = WAKE_HOME;
   // X4 only (it has no clock chip): keep the battery connected through sleep so the clock keeps
   // running. Off (default) powers the board down fully while asleep; the time then comes back
   // with the next Wi-Fi connection. 0 = off, 1 = on.

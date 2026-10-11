@@ -25,6 +25,9 @@ class CrossPointState : public PersistableStore<CrossPointState> {
   uint64_t lastSleepQuote = 0;
   uint8_t readerActivityLoadCount = 0;
   bool lastSleepFromReader = false;
+  // Home tab on screen (or under the screen) when sleep began, as a HomeMenuItem; 0 = none.
+  // A wake set to "Where I left off" reopens it.
+  uint8_t lastSleepHomeMenu = 0;
   bool showBootScreen = true;
 
   static const char* getFilePath() { return "/.crosspoint/state.json"; }

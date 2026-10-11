@@ -320,7 +320,8 @@ inline const std::vector<SettingInfo>& getBaseSettingsList() {
                           {StrId::STR_STATE_OFF, StrId::STR_STATE_ON}, "quickResumeSleepScreen",
                           StrId::STR_CAT_DISPLAY));
     v.push_back(SettingInfo::Enum(StrId::STR_WAKE_INTO_BOOK, &CrossPointSettings::wakeIntoBook,
-                          {StrId::STR_STATE_OFF, StrId::STR_STATE_ON}, "wakeIntoBook", StrId::STR_CAT_DISPLAY));
+                          {StrId::STR_STATE_OFF, StrId::STR_STATE_ON, StrId::STR_WAKE_WHERE_LEFT_OFF}, "wakeIntoBook",
+                          StrId::STR_CAT_DISPLAY));
     v.push_back(SettingInfo::Toggle(StrId::STR_SLEEP_BW_REFRESH, &CrossPointSettings::sleepBwRefresh, "sleepBwRefresh",
                                     StrId::STR_CAT_DISPLAY));
     v.push_back(SettingInfo::Toggle(StrId::STR_KEEP_CLOCK_IN_SLEEP, &CrossPointSettings::keepClockInSleep,

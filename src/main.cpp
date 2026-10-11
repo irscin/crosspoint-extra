@@ -449,6 +449,8 @@ void enterDeepSleep(bool fromTimeout = false) {
   const uint32_t sleepStarted = millis();
   HalPowerManager::Lock powerLock;  // Ensure we are at normal CPU frequency for sleep preparation
   APP_STATE.lastSleepFromReader = activityManager.isReaderActivity();
+  // The Home tab under whatever is on screen, for a wake set to "Where I left off".
+  APP_STATE.lastSleepHomeMenu = static_cast<uint8_t>(activityManager.homeMenuOrigin());
 
   deliverSleepPluginEvents();
 
@@ -779,9 +781,14 @@ void setup() {
     APP_STATE.openEpubPath.clear();
     APP_STATE.saveToFile();
   }
-  const std::string wakeBook =
-      wakebook::bookToOpen(isSleepWake, SETTINGS.wakeIntoBook, APP_STATE.openEpubPath, RECENT_BOOKS.getBooks(),
-                           [](const std::string& path) { return Storage.exists(path.c_str()); });
+  const bool wakeWhereLeftOff =
+      isSleepWake && SETTINGS.wakeIntoBook == CrossPointSettings::WAKE_WHERE_LEFT_OFF;
+  const std::string wakeBook = wakebook::bookToOpen(
+      isSleepWake,
+      wakebook::wantsBook(SETTINGS.wakeIntoBook == CrossPointSettings::WAKE_BOOK, wakeWhereLeftOff,
+                          APP_STATE.lastSleepFromReader),
+      APP_STATE.openEpubPath, RECENT_BOOKS.getBooks(),
+      [](const std::string& path) { return Storage.exists(path.c_str()); });
   const bool wakeToBook = !wakeBook.empty();
 
   setupDisplayAndFonts(resume != BootResume::Splash);
@@ -853,6 +860,13 @@ void setup() {
     // first paint is a cleaning waveform (allowFastInitialRefresh stays false),
     // which is the pass that takes the retained sleep frame off the panel.
     activityManager.goToReader(wakeBook);
+  } else if (wakeWhereLeftOff && !APP_STATE.lastSleepFromReader) {
+    // Back on the Home tab sleep began on. The Recent tab (or no record) keeps the usual landing on
+    // the first book; any other value names a tab HomeActivity::onEnter knows.
+    const auto tab = static_cast<HomeMenuItem>(APP_STATE.lastSleepHomeMenu);
+    const bool knownTab = APP_STATE.lastSleepHomeMenu < static_cast<uint8_t>(HomeMenuItem::RECENT_CONTINUE) &&
+                          tab != HomeMenuItem::NONE && tab != HomeMenuItem::RECENTS;
+    activityManager.goHome(knownTab ? tab : HomeMenuItem::RECENT_CONTINUE, needsWakeRefresh);
   } else {
     activityManager.goHome(HomeMenuItem::RECENT_CONTINUE, needsWakeRefresh);
   }

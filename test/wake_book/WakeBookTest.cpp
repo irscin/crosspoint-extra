@@ -31,3 +31,18 @@ TEST(WakeBook, ABookTakenOffRecentIsNotReopened) {
 TEST(WakeBook, ABookGoneFromTheCardGoesHome) {
   EXPECT_EQ(wakebook::bookToOpen(true, true, "/a.epub", recents, gone), "");
 }
+
+TEST(WakeBook, OnAlwaysWantsTheBook) {
+  EXPECT_TRUE(wakebook::wantsBook(true, false, false));
+  EXPECT_TRUE(wakebook::wantsBook(true, false, true));
+}
+
+TEST(WakeBook, WhereLeftOffWantsTheBookOnlyAfterSleepInTheReader) {
+  EXPECT_TRUE(wakebook::wantsBook(false, true, true));
+  EXPECT_FALSE(wakebook::wantsBook(false, true, false));
+}
+
+TEST(WakeBook, OffNeverWantsTheBook) {
+  EXPECT_FALSE(wakebook::wantsBook(false, false, true));
+  EXPECT_FALSE(wakebook::wantsBook(false, false, false));
+}

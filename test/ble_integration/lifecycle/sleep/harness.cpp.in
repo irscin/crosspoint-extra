@@ -67,6 +67,7 @@ struct ActivityManager {
   std::unique_ptr<Activity> pendingActivity;
   @RETURN_TYPE@ goToSleep(bool fromTimeout);
   bool isReaderActivity() { return currentActivity && currentActivity->name == "Reader"; }
+  uint8_t homeMenuOrigin() { return 0; }
   bool isForegroundReaderActivity() { return foregroundReader; }
   bool isForegroundActivityManagingTiltSensor() { return false; }
   uint32_t activityGeneration() { return 0; }
@@ -113,6 +114,7 @@ struct Settings {
 } SETTINGS;
 struct AppState {
   bool lastSleepFromReader = false;
+  uint8_t lastSleepHomeMenu = 0;
   bool showBootScreen = true;
   void saveToFile() { events.push_back("state-save"); }
 } APP_STATE;

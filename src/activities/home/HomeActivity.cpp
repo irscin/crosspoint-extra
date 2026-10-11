@@ -53,7 +53,7 @@
 #include "components/themes/TenorRadius.h"
 #include "components/icons/homeTabIcons.h"
 #include "PrioritiesStore.h"
-#include "util/PhoneTaskSync.h"
+#include "PhoneSyncActivity.h"
 #include "components/icons/listIcons.h"
 #include "activities/plugins/PluginCatalogActivity.h"
 #include "components/icons/tenorHomeTabIcons.h"
@@ -241,88 +241,33 @@ void HomeActivity::captureNavigation(MenuNavigationState& state) const {
 }
 
 void HomeActivity::onExit() {
-  phoneSync.end();
   freeCoverBuffer();
   UiTabListActivity::onExit();
 }
 
 // --- Phone sync (BLE to-do sync with the companion app) ---------------------------------------
-// Open while the To-do tab is on screen: the radio starts when the tab is shown and stops when the
-// user leaves it. A bottom ribbon shows the state and the code the app asks for.
+// Builds with the BLE task service put a "Phone sync" row at the top of the To-do tab. The radio
+// only runs on the screen that row opens (PhoneSyncActivity), so browsing the list costs nothing.
+namespace {
 #if defined(FREEINK_CAP_BLE_TASKS) && FREEINK_CAP_BLE_TASKS
-bool HomeActivity::phoneSyncRibbonShown() const { return activeTabId == Tab::PRIORITIES; }
+constexpr int PHONE_SYNC_ROWS = 1;
 #else
-bool HomeActivity::phoneSyncRibbonShown() const { return false; }
+constexpr int PHONE_SYNC_ROWS = 0;
 #endif
+}  // namespace
 
-int HomeActivity::phoneSyncRibbonHeight() const {
-  if (!phoneSyncRibbonShown()) return 0;
-  return 2 * renderer.getLineHeight(UI_10_FONT_ID) + 3 * 6;
-}
-
-void HomeActivity::tickPhoneSync() {
-#if defined(FREEINK_CAP_BLE_TASKS) && FREEINK_CAP_BLE_TASKS
-  const bool wanted = activeTabId == Tab::PRIORITIES;
-  if (!wanted) {
-    phoneSyncTried = false;
-    if (phoneSync.active() || phoneSync.failed()) {
-      phoneSync.end();
-      requestUpdate();
-    }
-    return;
-  }
-  if (!phoneSync.active()) {
-    if (!phoneSyncTried) {
-      phoneSyncTried = true;  // one attempt per visit: a refusal (low heap) is shown, not retried in a loop
-      phoneSync.begin(renderer);
-      requestUpdate();
-    }
-    return;
-  }
-  const auto poll = phoneSync.poll();
-  if (poll.listChanged) {
-    RenderLock lock(*this);
-    rebuildRows();
-  }
-  if (poll.redraw || poll.listChanged) requestUpdate();
-#endif
-}
-
-void HomeActivity::loop() {
-  tickPhoneSync();
-  UiTabListActivity::loop();
-}
-
-void HomeActivity::drawPhoneSyncRibbon() {
-  const int ribbonHeight = phoneSyncRibbonHeight();
-  if (ribbonHeight == 0) return;
-  const auto& metrics = UITheme::getInstance().getMetrics();
-  const int width = renderer.getScreenWidth();
-  const int top = renderer.getScreenHeight() - metrics.buttonHintsHeight - ribbonHeight;
-  renderer.drawLine(0, top, width, top, true);
-  const char* state = phoneSync.paused()          ? tr(STR_PHONE_SYNC_PAUSED)
-                      : phoneSync.failed()        ? tr(STR_PHONE_SYNC_UNAVAILABLE)
-                      : phoneSync.authenticated() ? tr(STR_PHONE_SYNC_PAIRED)
-                      : phoneSync.connected()     ? tr(STR_PHONE_SYNC_CONNECTED)
-                      : phoneSync.active()        ? tr(STR_PHONE_SYNC_WAITING)
-                                                  : tr(STR_PHONE_SYNC_WAITING);
-  const int lineHeight = renderer.getLineHeight(UI_10_FONT_ID);
-  char status[96];
-  snprintf(status, sizeof(status), "%s: %s", tr(STR_PHONE_SYNC), state);
-  renderer.drawCenteredText(UI_10_FONT_ID, top + 6, status, true, EpdFontFamily::BOLD);
-  if (phoneSync.paused()) {
-    renderer.drawCenteredText(UI_10_FONT_ID, top + 12 + lineHeight, tr(STR_PHONE_SYNC_RESUME_HINT), true,
-                              EpdFontFamily::REGULAR);
-  } else if (!phoneSync.failed() && !phoneSync.code().empty()) {
-    char code[96];
-    snprintf(code, sizeof(code), "%s: %s", tr(STR_PHONE_SYNC_CODE), phoneSync.code().c_str());
-    renderer.drawCenteredText(UI_10_FONT_ID, top + 12 + lineHeight, code, true, EpdFontFamily::REGULAR);
-  }
+void HomeActivity::openPhoneSync() {
+  freeCoverBuffer();
+  startActivityForResult(makeUniqueNoThrow<PhoneSyncActivity>(renderer, mappedInput),
+                         [this](const ActivityResult& result) {
+                           // The phone edited the list: show its rows, not the ones from before.
+                           if (result.isCancelled || activeTabId != Tab::PRIORITIES) return;
+                           RenderLock lock(*this);
+                           rebuildRows();
+                         });
 }
 
 void HomeActivity::onPause() {
-  phoneSync.end();
-  phoneSyncTried = false;
   // The manager holds RenderLock while pausing an activity.
   freeCoverBuffer();
   coverRendered = false;
@@ -411,6 +356,7 @@ void HomeActivity::rebuildRows() {
       break;
     case Tab::PRIORITIES:
       PRIORITIES_STORE.load();
+      if (PHONE_SYNC_ROWS) rowLabels.emplace_back(tr(STR_PHONE_SYNC));
       for (const auto& item : PRIORITIES_STORE.items()) rowLabels.push_back(item.title);
       break;
     case Tab::PLUGINS:
@@ -454,8 +400,8 @@ void HomeActivity::rebuildRows() {
     fui::ListItem item;
     item.label = rowLabels[i].c_str();
     if (activeTabId == Tab::FAVORITES) item.value = favoriteValues[i].c_str();
-    if (activeTabId == Tab::PRIORITIES) {
-      const bool done = PRIORITIES_STORE.items()[i].done;
+    if (activeTabId == Tab::PRIORITIES && i >= static_cast<size_t>(PHONE_SYNC_ROWS)) {
+      const bool done = PRIORITIES_STORE.items()[i - PHONE_SYNC_ROWS].done;
       const bool large = SETTINGS.uiTheme == CrossPointSettings::TENOR_UI;
       item.icon = fui::bitmapFromIcon(done ? (large ? icon_checkbox_on_32 : icon_checkbox_on_24)
                                            : (large ? icon_checkbox_off_32 : icon_checkbox_off_24));
@@ -515,7 +461,11 @@ void HomeActivity::activateIndex(const int index) {
       return;
     }
     case Tab::PRIORITIES: {
-      const auto i = static_cast<size_t>(index);
+      if (index < PHONE_SYNC_ROWS) {
+        openPhoneSync();
+        return;
+      }
+      const auto i = static_cast<size_t>(index - PHONE_SYNC_ROWS);
       {
         RenderLock lock(*this);
         // Done state is the only thing the device edits; a failed write reverts it.
@@ -692,7 +642,6 @@ void HomeActivity::drawFooter() {
   if (activeTabId == Tab::FOLDER && ringPos() == 0) tenorchrome::drawTip(renderer, tr(STR_FOLDER_HOLD));
   if (favoriteFileMissing) tenorchrome::drawTip(renderer, tr(STR_FILE_NOT_FOUND), 1, 3);
   if (activeTabId == Tab::STATS && statsResetTip) tenorchrome::drawTip(renderer, I18N.get(*statsResetTip), 1, 2);
-  drawPhoneSyncRibbon();
 }
 
 void HomeActivity::drawChrome() {
@@ -792,7 +741,6 @@ void HomeActivity::buildScreen(UiScreen& screen) {
   if (activeTabId == Tab::RECENT) screen.takeTop(static_cast<int16_t>(metrics.homeCoverTileHeight));
 
   if (activeTabId == Tab::STATS) screen.takeTop(static_cast<int16_t>(statsPanelHeight() + 12));
-  if (const int ribbon = phoneSyncRibbonHeight()) screen.takeBottom(static_cast<int16_t>(ribbon));
 
   if (activeTabId == Tab::FAVORITES && rowItems.empty()) {
     tenorchrome::drawTip(renderer, tr(STR_HOME_FAVORITES_HINT), 0, 6);
@@ -803,6 +751,9 @@ void HomeActivity::buildScreen(UiScreen& screen) {
     tenorchrome::drawTip(renderer, tr(STR_PRIORITIES_HINT), 0, 6);
     return;
   }
+  // Only the Phone sync row: keep it reachable (the phone can add tasks) and say why the list is bare.
+  if (activeTabId == Tab::PRIORITIES && PRIORITIES_STORE.items().empty())
+    tenorchrome::drawTip(renderer, tr(STR_NO_PRIORITIES), 0, 6);
   if (activeTabId == Tab::PLUGINS && rowItems.empty()) {
     screen.centeredText(tr(STR_NO_PLUGINS_INSTALLED), screen.theme().bodyText);
     return;

@@ -468,6 +468,10 @@ class CrossPointSettings : public PersistableStore<CrossPointSettings> {
   // Wake straight back into the book that was open when deep sleep began,
   // instead of returning to Home. 0 = off, 1 = on.
   uint8_t wakeIntoBook = 0;
+  // X4 only (it has no clock chip): keep the battery connected through sleep so the clock keeps
+  // running. Off (default) powers the board down fully while asleep; the time then comes back
+  // with the next Wi-Fi connection. 0 = off, 1 = on.
+  uint8_t keepClockInSleep = 0;
   // X3 only: end every sleep screen on one full black and white refresh, gray art as an
   // ordered dither (v1.0.12). 0 keeps the v1.0.11 gray waveforms. 1 = on (default).
   uint8_t sleepBwRefresh = 1;

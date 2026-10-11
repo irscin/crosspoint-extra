@@ -21,6 +21,7 @@ fixture = r'''
 #define LOG_INF(...) ((void)0)
 struct GPIO { bool x4 = false; bool deviceIsX4() const { return x4; } } gpio;
 struct Clock { bool valid = false; bool hasValidTime() const { return valid; } } halClock;
+struct Settings { unsigned char keepClockInSleep = 0; } SETTINGS;
 struct Power {
   unsigned calls = 0;
   bool retained = false;
@@ -32,14 +33,14 @@ struct Power {
 ''' + helper + r'''
 int main() {
   unsigned scenarios = 0, failures = 0;
-  for (bool x4 : {false, true}) for (bool valid : {false, true}) {
-    gpio.x4 = x4; halClock.valid = valid;
+  for (bool x4 : {false, true}) for (bool valid : {false, true}) for (bool keep : {false, true}) {
+    gpio.x4 = x4; halClock.valid = valid; SETTINGS.keepClockInSleep = keep;
     powerManager = Power{};
     sleepUntilPowerButton();
     ++scenarios;
-    if (powerManager.calls != 1 || powerManager.received != &gpio || powerManager.retained != valid) {
+    if (powerManager.calls != 1 || powerManager.received != &gpio || powerManager.retained != (keep && valid)) {
       ++failures;
-      std::printf("FAIL x4=%u valid=%u retained=%u\n", x4, valid, powerManager.retained);
+      std::printf("FAIL x4=%u valid=%u keep=%u retained=%u\n", x4, valid, keep, powerManager.retained);
     }
   }
   std::printf("main helper: %u scenarios, %u failures\n", scenarios, failures);
@@ -56,10 +57,13 @@ with tempfile.TemporaryDirectory(prefix='x4-main-helper-') as temp:
     subprocess.run([str(path / 'helper')], check=True)
 assert re.search(r'startDeepSleep\(gpio,\s*(?:halClock\.hasValidTime\(\)|preserveClock)\)', helper), \
     'Device sleep helper must pass current clock validity as the second argument'
-assert 'SETTINGS' not in helper, 'Sleep wakes on the power button alone; no setting chooses wake buttons'
+assert 'wakeButtons' not in helper, 'Sleep wakes on the power button alone; no setting chooses wake buttons'
+# Retention is opt-in (keepClockInSleep: the X4 must keep its battery connected to keep time) and
+# still needs a valid runtime clock.
 if 'preserveClock)' in helper:
-    assert re.search(r'(?:const\s+)?bool\s+preserveClock\s*=\s*halClock\.hasValidTime\(\)', helper), \
-        'Retention must use runtime validity, independently of display settings'
+    assert re.search(r'(?:const\s+)?bool\s+preserveClock\s*=\s*SETTINGS\.keepClockInSleep\s*&&\s*'
+                     r'halClock\.hasValidTime\(\)', helper), \
+        'Retention must need both the keepClockInSleep opt-in and runtime clock validity'
 assert 'statusBarClock' not in helper and 'clockHasBeenSynced' not in helper, \
     'Clock visibility and historical settings do not establish runtime time validity'
 outside = source[:start] + source[end:]

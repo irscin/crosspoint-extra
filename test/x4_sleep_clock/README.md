@@ -10,16 +10,20 @@ and wake arming. Both builds use ASan/UBSan and warnings as errors.
 `src/main.cpp`, compiles it with narrow global-object stubs, and checks four
 board/epoch combinations. It also checks structurally that the three device
 sleep routes use this helper, that no direct device sleep call bypasses it, and
-that no setting reaches it. This does not compile all of main.cpp or simulate
+that retention needs both the `keepClockInSleep` opt-in and a valid clock. This does not compile all of main.cpp or simulate
 those three complete journeys.
 
 `journey.py --output <directory>` compiles that same helper with the complete
 `HalPowerManager.cpp` and SDK `PowerManager.cpp`, for X3 and X4 with and without
 a valid clock, while the settings boundary holds each value 0 to 3 that a card
-may still store under the retired `wakeButtons` key. Every recorded call
-sequence must equal `power-only-trace.json`, recorded from the b2e808f sources
-with `wakeButtons=0`. Replaying b2e808f with `--source-root` fails for values 1
-to 3 on X3, where that tree entered the light-sleep button loop.
+may still store under the retired `wakeButtons` key (with the `keepClockInSleep`
+opt-in on, so the valid-clock X4 cases cover retained sleep). Every recorded call
+sequence must equal `power-only-trace.json`. It was first recorded from the
+b2e808f sources with `wakeButtons=0`, then re-recorded (`--record`) when the
+retained X4 sleep started parking the SD and panel chip selects: that is the
+only difference, eight calls in `x4-clock1`. Replaying b2e808f with
+`--source-root` fails for values 1 to 3 on X3, where that tree entered the
+light-sleep button loop.
 
 All three scripts accept `--source-root` to replay immutable production sources.
 

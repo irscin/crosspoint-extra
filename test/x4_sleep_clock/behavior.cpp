@@ -49,6 +49,27 @@ void x4(bool preserve, bool useDefault = false) {
         position("hold:13:-1") < position("isolate"), "X4 release-write-hold precedes isolation");
   check(fake::lightSleeps == 0, "X4 goes straight to deep sleep");
   check(fake::ms >= 100, "power button held twice is released before sleeping");
+  // A kept battery keeps the SD card and panel powered: both chip selects are parked HIGH under a
+  // hold before the pads are isolated. A cut battery leaves them alone.
+  for (const int pin : {12, 21}) {
+    const std::string hold = "hold:" + std::to_string(pin) + ":-1";
+    if (desired) {
+      check(fake::levels[pin] == 1 && fake::held[pin], "kept X4 parks SD/panel line high");
+      check(position(hold) < position("isolate"), "kept X4 parks before isolation");
+    } else {
+      check(!fake::held[pin] && position("write:" + std::to_string(pin) + ":1") == fake::trace.size(),
+            "cut X4 leaves SD/panel lines alone");
+    }
+  }
+}
+void releaseAfterWake(BoardConfig::Board board) {
+  fake::reset(board);
+  for (const int pin : {12, 21}) fake::held[pin] = true;
+  HalGPIO gpio;
+  powerManager.releaseSleepParking(gpio);
+  const bool x4 = board == BoardConfig::Board::X4;
+  for (const int pin : {12, 21})
+    check(fake::held[pin] != x4, x4 ? "X4 wake releases parked lines" : "non-X4 wake leaves holds alone");
 }
 void x3(bool preserve) {
   fake::reset(BoardConfig::Board::X3); sleep(preserve);
@@ -68,6 +89,7 @@ int main() {
 #if !SOC_PM_SUPPORT_EXT1_WAKEUP
   x4(true); x4(false); x4(true, true);
   x3(true); x3(false);
+  releaseAfterWake(BoardConfig::Board::X4); releaseAfterWake(BoardConfig::Board::X3);
 #endif
   const auto before = other(false);
   check(before == other(true), "preserve flag does not change other-board sleep trace");

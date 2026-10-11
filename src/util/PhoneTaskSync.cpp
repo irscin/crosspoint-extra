@@ -55,6 +55,9 @@ void PhoneTaskSync::end() {
   if (!started && !didFail) return;
   taskble::stop();
   started = false;
+  // Clear the refusal too: HomeActivity::tickPhoneSync ends and repaints while failed() holds, so a
+  // sticky flag repainted the e-ink panel on every loop pass on the other tabs.
+  didFail = false;
   session = tasksync::Session{pairingCode};
 }
 

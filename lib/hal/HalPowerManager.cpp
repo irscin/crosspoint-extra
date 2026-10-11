@@ -22,6 +22,28 @@ HalPowerManager powerManager;  // Singleton instance
 // X4 Pro display chip select.
 static constexpr gpio_num_t XTEINK_C3_GPIO13 = GPIO_NUM_13;
 
+#if !SOC_PM_SUPPORT_EXT1_WAKEUP
+// A C3 X4 that keeps its clock through sleep keeps the battery latched, so the SD card and the
+// panel controller stay powered, while the sleep path isolates every pad. A floating chip select
+// lets the card (or the panel) see bus noise and leave its idle state, so both selects are held
+// HIGH (deselected) through sleep. The panel reset already is (powerDownRailsForSleep).
+static void sleepParkedPins(int8_t (&pins)[2]) {
+  pins[0] = BoardConfig::ACTIVE.sd.cs;
+  pins[1] = BoardConfig::ACTIVE.display.cs;
+}
+#endif
+
+void HalPowerManager::releaseSleepParking([[maybe_unused]] const HalGPIO& gpio) const {
+#if !SOC_PM_SUPPORT_EXT1_WAKEUP
+  if (!gpio.deviceIsX4()) return;
+  int8_t pins[2];
+  sleepParkedPins(pins);
+  for (const int8_t pin : pins) {
+    if (pin >= 0) gpio_hold_dis(static_cast<gpio_num_t>(pin));
+  }
+#endif
+}
+
 void HalPowerManager::begin() {
   // Gauge boards never sample batteryAdc. On X3 its placeholder GPIO0 is I2C SCL;
   // changing it to a GPIO input detaches the bus initialized by HalGPIO.
@@ -101,6 +123,18 @@ void HalPowerManager::startDeepSleep([[maybe_unused]] HalGPIO& gpio, [[maybe_unu
     gpio_set_direction(XTEINK_C3_GPIO13, GPIO_MODE_OUTPUT);
     gpio_set_level(XTEINK_C3_GPIO13, gpio.deviceIsX4() && preserveClock ? HIGH : LOW);
     gpio_hold_en(XTEINK_C3_GPIO13);
+    if (gpio.deviceIsX4() && preserveClock) {
+      int8_t pins[2];
+      sleepParkedPins(pins);
+      for (const int8_t pin : pins) {
+        if (pin < 0) continue;
+        const auto g = static_cast<gpio_num_t>(pin);
+        gpio_hold_dis(g);
+        gpio_set_direction(g, GPIO_MODE_OUTPUT);
+        gpio_set_level(g, HIGH);
+        gpio_hold_en(g);
+      }
+    }
   }
 #endif
 

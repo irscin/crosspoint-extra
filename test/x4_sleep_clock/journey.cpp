@@ -20,8 +20,11 @@ struct ClockBoundary {
 // The value a settings card stored in its "wakeButtons" key. Older firmware
 // loaded it into this field; journey.py compares every stored value against
 // the power-button-only trace.
+// keepClockInSleep is the opt-in for X4 clock retention; on here so the clock1 cases still
+// cover the retained sleep.
 struct SettingsBoundary {
   uint8_t wakeButtons = 0;
+  uint8_t keepClockInSleep = 1;
 } SETTINGS;
 
 #include "helper.inc"

@@ -268,11 +268,11 @@ inline const std::vector<SettingInfo>& getBaseSettingsList() {
     statusBarClockValues[CrossPointSettings::STATUS_BAR_CLOCK_LEFT] = StrId::STR_DIR_LEFT;
 
     const bool hasTilt = halTiltSensor.isAvailable();
-    // 71 unconditional descriptors; the IMU branch adds the Motion sensor tab: reader,
+    // 72 unconditional descriptors; the IMU branch adds the Motion sensor tab: reader,
     // tab and row tilt, the two flick strengths, the two hard shake rows, face down, face up
     // and double tap.
     // Cold-catalog tests cover each capability branch and the IMU variant.
-    constexpr size_t fixedCount = 71
+    constexpr size_t fixedCount = 72
 #if defined(FREEINK_CAP_FRONTLIGHT) && FREEINK_CAP_FRONTLIGHT
                                   + 1
 #endif
@@ -323,6 +323,8 @@ inline const std::vector<SettingInfo>& getBaseSettingsList() {
                           {StrId::STR_STATE_OFF, StrId::STR_STATE_ON}, "wakeIntoBook", StrId::STR_CAT_DISPLAY));
     v.push_back(SettingInfo::Toggle(StrId::STR_SLEEP_BW_REFRESH, &CrossPointSettings::sleepBwRefresh, "sleepBwRefresh",
                                     StrId::STR_CAT_DISPLAY));
+    v.push_back(SettingInfo::Toggle(StrId::STR_KEEP_CLOCK_IN_SLEEP, &CrossPointSettings::keepClockInSleep,
+                                    "keepClockInSleep", StrId::STR_CAT_DISPLAY));
 #if FREEINK_CAP_FRONTLIGHT
     v.push_back(SettingInfo::Toggle(StrId::STR_RESTORE_LIGHT_ON_WAKE, &CrossPointSettings::frontlightRestoreOnWake,
                             "frontlightRestoreOnWake", StrId::STR_CAT_DISPLAY));
@@ -632,6 +634,9 @@ inline bool settingHiddenOnThisBoard(const SettingInfo& s) {
   if (s.nameId == StrId::STR_SLEEP_BW_REFRESH && BoardConfig::ACTIVE.board != BoardConfig::Board::XteinkX3 &&
       BoardConfig::ACTIVE.board != BoardConfig::Board::XteinkX3Uc8279)
     return true;
+  // Only the C3 X4 cuts its battery in sleep; elsewhere the clock keeps running regardless.
+  if (s.nameId == StrId::STR_KEEP_CLOCK_IN_SLEEP && BoardConfig::ACTIVE.board != BoardConfig::Board::XteinkX4)
+    return true;
   if (BoardConfig::hasTouch() &&
       (s.nameId == StrId::STR_FRONT_BTN_FOLLOW_ORIENTATION || s.nameId == StrId::STR_SUNLIGHT_FADING_FIX ||
        s.nameId == StrId::STR_BACK_SHORT_TO_FILE_BROWSER))
@@ -650,6 +655,7 @@ inline int deviceSettingsTab(const SettingInfo& setting) {
       setting.valuePtr == &CrossPointSettings::quickResumeSleepScreen ||
       setting.valuePtr == &CrossPointSettings::wakeIntoBook ||
       setting.valuePtr == &CrossPointSettings::sleepBwRefresh ||
+      setting.valuePtr == &CrossPointSettings::keepClockInSleep ||
       setting.valuePtr == &CrossPointSettings::sleepTimeoutMinutes ||
       setting.valuePtr == &CrossPointSettings::frontlightRestoreOnWake)
     return static_cast<int>(settingstabs::Tab::SLEEP);

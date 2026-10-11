@@ -7,8 +7,8 @@
 
 class GfxRenderer;
 
-// Phone sync as a component: advertises the BLE task service while the Home To-do tab is open, serves
-// the companion app's requests against PRIORITIES_STORE, and exposes the state the tab's ribbon shows.
+// Phone sync as a component: advertises the BLE task service while the Phone sync screen is open, serves
+// the companion app's requests against PRIORITIES_STORE, and exposes the state that screen shows.
 // Builds without FREEINK_CAP_BLE_TASKS get inert behaviour (begin() fails), so callers need no #if.
 class PhoneTaskSync {
  public:
@@ -22,7 +22,7 @@ class PhoneTaskSync {
   void end();
   bool active() const { return started; }
   bool failed() const { return didFail; }
-  // The radio was switched off after sitting idle with no phone connected; leave and re-enter the tab to resume.
+  // The radio was switched off after sitting idle with no phone connected; begin() again to resume.
   bool paused() const { return didPause; }
   // Serves queued requests and drops stale or wrong-code peers. Call from the main loop.
   Poll poll();

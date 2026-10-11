@@ -17,7 +17,11 @@ truth and every reply carries the full list.
 3. App: **To-do list** tab → **Pairing code** → type the code once (the app
    remembers it) → **Send to device**.
 
-The radio is on only while the Phone sync screen is open.
+The radio is on only while the Phone sync screen is open. Leaving the screen,
+or the device going to sleep, turns it off. With no phone connected for 5
+minutes the screen pauses the radio by itself; press **Select** to turn it back
+on. A paired phone that is sending requests keeps the device from auto-sleeping
+for up to 2 minutes after its last request.
 
 ## The code
 

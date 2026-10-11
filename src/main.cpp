@@ -382,7 +382,9 @@ void saveAppState() { APP_STATE.saveToFile(); }
 
 static void sleepUntilPowerButton() {
 #ifndef SIMULATOR
-  const bool preserveClock = halClock.hasValidTime();
+  // The X4 has no clock chip: keeping the time means keeping the battery connected through sleep,
+  // so it is opt-in (Settings > Sleep). Otherwise the X4 powers off fully, as before v1.0.8.
+  const bool preserveClock = SETTINGS.keepClockInSleep && halClock.hasValidTime();
   if (gpio.deviceIsX4()) {
     LOG_INF("SLP", "X4 clock retention requested=%u", preserveClock);
   }
@@ -623,6 +625,7 @@ void setup() {
 #endif
   gpio.begin();
   powerManager.begin();
+  powerManager.releaseSleepParking(gpio);
   logHeapMark("boot");
 
   const auto wakeupReason = gpio.getWakeupReason();

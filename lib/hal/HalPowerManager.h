@@ -40,9 +40,13 @@ class HalPowerManager {
 
   // Setup wake up GPIO and enter deep sleep
   // Should be called inside main loop() to respect active normal-speed locks
-  // preserveClock keeps the C3 X4 supply latched for its RTC-domain system clock.
-  // X3 and other boards retain their normal rail policy.
+  // preserveClock keeps the C3 X4 supply latched for its RTC-domain system clock, and parks the
+  // SD card and panel lines that then stay powered. X3 and other boards retain their normal rail policy.
   void startDeepSleep(HalGPIO& gpio, bool preserveClock = false) const;
+
+  // Releases the pad holds a clock-keeping X4 sleep left on the SD and panel lines. Call once the
+  // board is detected (after gpio.begin()), before the SD card or the display is touched.
+  void releaseSleepParking(const HalGPIO& gpio) const;
 
   // Get battery percentage (range 0-100). On a board with an I2C gauge only the loop
   // task reads the gauge; other tasks (the render task) get the loop's last reading.

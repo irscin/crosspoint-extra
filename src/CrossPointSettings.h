@@ -323,6 +323,14 @@ class CrossPointSettings : public PersistableStore<CrossPointSettings> {
   uint8_t frontButtonFollowOrientation = 0;
   // Swaps the two side buttons everywhere: menus and lists (Up/Down) and reader page turns.
   uint8_t sideButtonsSwapped = 0;
+  // Menus with tabs: the front pair switches tabs and the side pair steps rows (default is the reverse).
+  uint8_t menuButtonsSwapped = 0;
+  // Quick Actions menu slots: each holds a quickactions::Id (0 = empty).
+  uint8_t quickAction1 = 0;
+  uint8_t quickAction2 = 0;
+  uint8_t quickAction3 = 0;
+  uint8_t quickAction4 = 0;
+  uint8_t quickAction5 = 0;
   uint8_t keyboardAxisSwapped = 1;
   uint8_t keyboardAligned = 1;
   // Ten thiet bi do nguoi dung dat, dung cho hostname Wi-Fi, ten mDNS va ten

@@ -163,6 +163,14 @@ void CrossPointWebServerActivity::onEnter() {
   }
 #endif
 
+  // A quick action names its mode, so there is nothing to pick.
+  if (presetMode == static_cast<int>(NetworkMode::JOIN_NETWORK) ||
+      presetMode == static_cast<int>(NetworkMode::CONNECT_CALIBRE) ||
+      presetMode == static_cast<int>(NetworkMode::CREATE_HOTSPOT)) {
+    onNetworkModeSelected(static_cast<NetworkMode>(presetMode));
+    return;
+  }
+
   // Launch network mode selection subactivity
   LOG_DBG("WEBACT", "Launching NetworkModeSelectionActivity...");
   startActivityForResult(std::make_unique<NetworkModeSelectionActivity>(renderer, mappedInput),

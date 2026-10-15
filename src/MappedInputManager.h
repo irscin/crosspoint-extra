@@ -108,6 +108,13 @@ class MappedInputManager {
   // using the same live-orientation transform as ScreenLeft/Right/Up/Down.
   Labels mapDirectionalLabels(const char* back, const char* confirm, const char* left, const char* right,
                               const char* up, const char* down) const;
+  // Menu navigation axes. By default the front pair (logical Left/Right) steps rows and the side pair
+  // (logical Up/Down) switches tabs; "swap menu buttons" trades the two pairs. Menus bind these, not the
+  // raw logical buttons.
+  static Button rowPrevious();
+  static Button rowNext();
+  static Button tabPrevious();
+  static Button tabNext();
   // The physical button (HalGPIO::BTN_*) logical Back reads. Code that samples the buttons
   // itself asks here instead of reading the setting.
   uint8_t physicalBack() const;

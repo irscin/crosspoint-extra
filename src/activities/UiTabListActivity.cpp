@@ -146,18 +146,20 @@ void UiTabListActivity::moveRingTo(const int ringIndex) {
 bool UiTabListActivity::handleTabHoldNavigation() {
   using Button = MappedInputManager::Button;
   constexpr unsigned long HOLD_MS = 700;
-  const bool up = mappedInput.isPressed(Button::Up), down = mappedInput.isPressed(Button::Down);
+  const Button tabPrev = MappedInputManager::tabPrevious(), tabNext = MappedInputManager::tabNext();
+  const Button rowPrev = MappedInputManager::rowPrevious(), rowNext = MappedInputManager::rowNext();
+  const bool up = mappedInput.isPressed(tabPrev), down = mappedInput.isPressed(tabNext);
   if (up && down) {
     tabChordBlocked = true;
-    mappedInput.wasLongPressed(Button::Up, 0);
-    mappedInput.wasLongPressed(Button::Down, 0);
+    mappedInput.wasLongPressed(tabPrev, 0);
+    mappedInput.wasLongPressed(tabNext, 0);
   }
   if (tabChordBlocked) {
     if (!up && !down) tabChordBlocked = false;
     return true;
   }
   for (int direction : {-1, 1}) {
-    const Button button = direction < 0 ? Button::Up : Button::Down;
+    const Button button = direction < 0 ? tabPrev : tabNext;
     if (mappedInput.wasLongPressed(button, HOLD_MS)) {
       {
         RenderLock lock(*this);
@@ -168,13 +170,13 @@ bool UiTabListActivity::handleTabHoldNavigation() {
     }
   }
   // Favorites keeps its explicitly approved hold-to-reorder gesture.
-  if (mappedInput.isPressed(Button::Left) && giuNutDiDong(-1)) return true;
-  if (mappedInput.isPressed(Button::Right) && giuNutDiDong(1)) return true;
-  if (mappedInput.wasLongPressed(Button::Left, HOLD_MS)) {
+  if (mappedInput.isPressed(rowPrev) && giuNutDiDong(-1)) return true;
+  if (mappedInput.isPressed(rowNext) && giuNutDiDong(1)) return true;
+  if (mappedInput.wasLongPressed(rowPrev, HOLD_MS)) {
     moveToVisibleBoundary(false, true);
     return true;
   }
-  if (mappedInput.wasLongPressed(Button::Right, HOLD_MS)) {
+  if (mappedInput.wasLongPressed(rowNext, HOLD_MS)) {
     moveToVisibleBoundary(true, true);
     return true;
   }
@@ -193,10 +195,10 @@ void UiTabListActivity::navigateButtons() {
   // the edge button into the front one, and each runs on its own navigator:
   // ButtonNavigator keeps one hold-suppression latch per instance and clears it
   // on every release, so one shared navigator lets the axes corrupt each other.
-  buttonNavigator.onRelease({MappedInputManager::Button::Right}, [this] { queueNavIntent(NavIntent::StepNext); });
-  buttonNavigator.onRelease({MappedInputManager::Button::Left}, [this] { queueNavIntent(NavIntent::StepPrev); });
-  tabNavigator.onRelease({MappedInputManager::Button::Down}, [this] { queueNavIntent(NavIntent::TabNext); });
-  tabNavigator.onRelease({MappedInputManager::Button::Up}, [this] { queueNavIntent(NavIntent::TabPrev); });
+  buttonNavigator.onRelease({MappedInputManager::rowNext()}, [this] { queueNavIntent(NavIntent::StepNext); });
+  buttonNavigator.onRelease({MappedInputManager::rowPrevious()}, [this] { queueNavIntent(NavIntent::StepPrev); });
+  tabNavigator.onRelease({MappedInputManager::tabNext()}, [this] { queueNavIntent(NavIntent::TabNext); });
+  tabNavigator.onRelease({MappedInputManager::tabPrevious()}, [this] { queueNavIntent(NavIntent::TabPrev); });
 }
 
 void UiTabListActivity::stepSelection(const int direction) {

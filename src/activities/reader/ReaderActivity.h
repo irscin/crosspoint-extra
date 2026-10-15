@@ -129,6 +129,10 @@ class ReaderActivity : public Activity {
   // A format that has it runs it on its next pass; the others refuse it.
   virtual bool requestShortcut(ReaderShortcut) { return false; }
 
+  // True for a format that runs the book actions of the Quick Actions menu (next/previous page,
+  // bookmark, footnotes, sync, look up, clipping, tilt).
+  virtual bool supportsQuickActions() const { return false; }
+
   // True while the reader keeps the page-turner radio from starting: a book still building its
   // index in the background needs the heap the radio would take.
   virtual bool holdsRadio() const { return false; }

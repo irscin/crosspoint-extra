@@ -309,13 +309,13 @@ void UiListActivity::navigateButtons() {
     moveToVisibleBoundary(true);
     return;
   }
-  if (mappedInput.wasReleased(Button::Right)) {
+  if (mappedInput.wasReleased(MappedInputManager::rowNext())) {
     queueNavIntent(NavIntent::StepNext);
-  } else if (mappedInput.wasReleased(Button::Left)) {
+  } else if (mappedInput.wasReleased(MappedInputManager::rowPrevious())) {
     queueNavIntent(NavIntent::StepPrev);
-  } else if (mappedInput.wasReleased(Button::Down)) {
+  } else if (mappedInput.wasReleased(MappedInputManager::tabNext())) {
     if (!activityManager.switchSettingsSibling(1)) moveListPage(1);
-  } else if (mappedInput.wasReleased(Button::Up)) {
+  } else if (mappedInput.wasReleased(MappedInputManager::tabPrevious())) {
     if (!activityManager.switchSettingsSibling(-1)) moveListPage(-1);
   }
 }
@@ -388,7 +388,9 @@ void UiListActivity::drawChrome() {
 }
 
 void UiListActivity::drawFooter() {
-  const auto labels = mappedInput.mapLabels(tr(STR_BACK), tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
+  const auto labels = mappedInput.mapLabels(
+      tr(STR_BACK), tr(STR_SELECT), SETTINGS.menuButtonsSwapped ? tr(STR_DIR_LEFT) : tr(STR_DIR_UP),
+      SETTINGS.menuButtonsSwapped ? tr(STR_DIR_RIGHT) : tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 }
 

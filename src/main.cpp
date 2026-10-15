@@ -47,6 +47,7 @@
 #endif
 
 #include <cstring>
+#include <utility>
 #ifndef SIMULATOR
 #include <esp_heap_caps.h>
 #include <esp_ota_ops.h>
@@ -62,12 +63,15 @@
 #include "MappedInputManager.h"
 #include "OpdsServerStore.h"
 #include "QuickAction.h"
+#include "QuickActions.h"
 #include "ReadingStatsStore.h"
 #include "RecentBooksStore.h"
 #include "SdCardFontSystem.h"
 #include "activities/Activity.h"
 #include "activities/ActivityManager.h"
 #include "activities/home/BookStatsActivity.h"
+#include "activities/network/NetworkModeSelectionActivity.h"
+#include "activities/util/QuickActionsActivity.h"
 #include "QuoteStore.h"
 #include "activities/home/QuotesActivity.h"
 
@@ -958,6 +962,88 @@ static void runQuickAction(const uint8_t action, const quickaction::Trigger trig
     case quickaction::Outcome::None:
       break;
   }
+}
+
+// Quick Actions menu: runs one picked action on the screen in front (the menu has already closed).
+void quickactions::run(const uint8_t id) {
+  using namespace quickactions;
+  switch (id) {
+    case SLEEP:
+      enterDeepSleep();
+      break;
+    case REFRESH:
+      if (!activityManager.handleForcedRefresh()) {
+        RenderLock lock;
+        renderer.displayBuffer(HalDisplay::HALF_REFRESH);
+      }
+      break;
+    case NEXT_PAGE:
+      activityManager.pageTurn(true);
+      break;
+    case PREV_PAGE:
+      activityManager.pageTurn(false);
+      break;
+    case FOOTNOTES:
+      activityManager.readerShortcut(ReaderShortcut::Footnotes);
+      break;
+    case BOOKMARK:
+      activityManager.readerShortcut(ReaderShortcut::Bookmark);
+      break;
+    case SYNC_PROGRESS:
+      activityManager.readerShortcut(ReaderShortcut::SyncProgress);
+      break;
+    case LOOKUP:
+      activityManager.readerShortcut(ReaderShortcut::Lookup);
+      break;
+    case CLIPPING:
+      activityManager.readerShortcut(ReaderShortcut::Quote);
+      break;
+    case TILT_PAGE_TURN:
+      activityManager.readerShortcut(ReaderShortcut::TiltPageTurn);
+      break;
+    case FILE_TRANSFER:
+      activityManager.goToFileTransfer();
+      break;
+    case JOIN_NETWORK:
+      activityManager.goToFileTransfer(static_cast<int>(NetworkMode::JOIN_NETWORK));
+      break;
+    case CALIBRE:
+      activityManager.goToFileTransfer(static_cast<int>(NetworkMode::CONNECT_CALIBRE));
+      break;
+    case HOTSPOT:
+      activityManager.goToFileTransfer(static_cast<int>(NetworkMode::CREATE_HOTSPOT));
+      break;
+    case BROWSE_FILES:
+      activityManager.goToFileBrowser();
+      break;
+    case FRONTLIGHT:
+      if (Frontlight.present()) {
+        const bool lightOn = !Frontlight.isOn();
+        Frontlight.setOn(lightOn);
+        SETTINGS.frontlightOn = lightOn ? 1 : 0;
+        SETTINGS.saveToFile();
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+// Holding Back on Home or in an EPUB opens the Quick Actions menu; what it picked runs once it has closed.
+static void handleQuickActions() {
+  if (quickactions::pending != quickactions::NONE) {
+    if (activityManager.isForegroundNamed("QuickActions")) return;  // the menu is still closing
+    const uint8_t id = std::exchange(quickactions::pending, quickactions::NONE);
+    quickactions::run(id);
+    return;
+  }
+  if (!quickactions::anyConfigured() || activityManager.isForegroundNamed("QuickActions")) return;
+  const bool home = activityManager.isForegroundHome();
+  const bool book = activityManager.foregroundReaderHasQuickActions();
+  if (!home && !book) return;
+  if (!mappedInputManager.wasLongPressed(MappedInputManager::Button::Back, 1000)) return;
+  if (quickactions::configured(book).empty()) return;
+  activityManager.pushActivity(std::make_unique<QuickActionsActivity>(renderer, mappedInputManager, book));
 }
 
 #if defined(TENOR_PRESS_PROBE) && !defined(SIMULATOR)
@@ -2005,6 +2091,8 @@ void loop() {
   if (gpio.wasUsbStateChanged() && !activityManager.isReaderActivity()) {
     activityManager.requestUpdate();
   }
+
+  handleQuickActions();
 
   const unsigned long activityStartTime = millis();
   activityManager.loop();

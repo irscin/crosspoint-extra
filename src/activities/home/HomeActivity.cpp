@@ -586,7 +586,7 @@ bool HomeActivity::handleButtons() {
   // Holding the front previous button brings the card back to the most recent book.
   // Queued like every other move: the loop must not wait for the panel.
   if (activeTabId == Tab::RECENT && tenorchrome::enabled() &&
-      mappedInput.wasLongPressed(MappedInputManager::Button::Left, 700)) {
+      mappedInput.wasLongPressed(MappedInputManager::rowPrevious(), 700)) {
     queueNavIntent(NavIntent::FirstRow);
     return true;
   }
@@ -687,7 +687,8 @@ void HomeActivity::drawFooter() {
   const auto labels =
       card ? mappedInput.mapLabels(back, hasRecent ? tr(STR_SELECT) : "", several ? tr(STR_DIR_LEFT) : "",
                                    several ? tr(STR_DIR_RIGHT) : "")
-           : mappedInput.mapLabels(back, tr(STR_SELECT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
+           : mappedInput.mapLabels(back, tr(STR_SELECT), SETTINGS.menuButtonsSwapped ? tr(STR_DIR_LEFT) : tr(STR_DIR_UP),
+                                SETTINGS.menuButtonsSwapped ? tr(STR_DIR_RIGHT) : tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
   if (activeTabId == Tab::FOLDER && ringPos() == 0) tenorchrome::drawTip(renderer, tr(STR_FOLDER_HOLD));
   if (favoriteFileMissing) tenorchrome::drawTip(renderer, tr(STR_FILE_NOT_FOUND), 1, 3);
@@ -979,7 +980,7 @@ void HomeActivity::favoritesChanged() {
 }
 bool HomeActivity::giuNutDiDong(int direction) {
   if (activeTabId != Tab::FAVORITES) return false;
-  const auto button = direction > 0 ? MappedInputManager::Button::Right : MappedInputManager::Button::Left;
+  const auto button = direction > 0 ? MappedInputManager::rowNext() : MappedInputManager::rowPrevious();
   if (!mappedInput.wasLongPressed(button, 700)) return true;
   const std::string key = favoriteKey(ringPos() - 1);
   if (key.empty()) return true;

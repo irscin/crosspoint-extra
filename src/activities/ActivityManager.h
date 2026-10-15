@@ -33,7 +33,7 @@ enum class HomeMenuItem {
 };
 
 // A reader shortcut a quick action asks the foreground reader for (quickaction::Outcome).
-enum class ReaderShortcut : uint8_t { None, Menu, Quote };
+enum class ReaderShortcut : uint8_t { None, Menu, Quote, Bookmark, SyncProgress, Lookup, Footnotes, TiltPageTurn };
 
 /**
  * ActivityManager
@@ -107,7 +107,8 @@ class ActivityManager {
   void replaceActivity(std::unique_ptr<Activity>&& newActivity);
 
   // goTo... functions are convenient wrapper for replaceActivity()
-  void goToFileTransfer();
+  // presetMode (a NetworkMode value) skips the mode picker; -1 shows it.
+  void goToFileTransfer(int presetMode = -1);
   void goToUsbDrive();
   // theBanDau: the mo san cua man Cai dat. Man chinh bay cac nhom thanh dong nen no
   // goi thang vao dung the, khoi bat nguoi ta nhay the lai tu dau.
@@ -154,6 +155,10 @@ class ActivityManager {
   bool isForegroundReaderActivity() const;
   bool isForegroundActivityManagingTiltSensor() const;
   bool isForegroundReaderReady() const;
+  // Quick Actions (long-press Back) open from Home and from a ready reader that has book actions.
+  bool isForegroundHome() const;
+  bool foregroundReaderHasQuickActions() const;
+  bool isForegroundNamed(const char* activityName) const;
   bool foregroundReaderHoldsRadio() const;
   // The foreground reader frees what it can before the radio starts (ReaderActivity::readyForRadio).
   bool readyForegroundReaderForRadio();

@@ -1322,6 +1322,47 @@ void EpubReaderActivity::loop() {
     return;
   }
   if (shortcut == ReaderShortcut::Menu && !endOfBookMenuOpen) confirmReleased = true;
+  // The Quick Actions menu's book actions, each through the branch the reader's own key takes.
+  if (shortcut != ReaderShortcut::None && shortcut != ReaderShortcut::Menu && shortcut != ReaderShortcut::Quote &&
+      !endOfBookMenuOpen) {
+    switch (shortcut) {
+      case ReaderShortcut::Bookmark:
+        if (waitsForIndex()) return;
+        addBookmark();
+        showBookmarkMessage = true;
+        bookmarkMessageTime = millis();
+        requestUpdate();
+        return;
+      case ReaderShortcut::SyncProgress:
+        launchKOReaderSync();
+        return;
+      case ReaderShortcut::Lookup:
+        openDictionaryWordSelect();
+        return;
+      case ReaderShortcut::TiltPageTurn:
+        toggleTiltFromReader();
+        return;
+      case ReaderShortcut::Footnotes:
+        if (footnoteDepth > 0) {
+          restoreSavedPosition();
+        } else if (currentPageFootnotes.size() == 1) {
+          navigateToHref(currentPageFootnotes[0].href, true);
+        } else if (currentPageFootnotes.size() > 1) {
+          startActivityForResult(
+              std::make_unique<EpubReaderFootnotesActivity>(renderer, mappedInput, currentPageFootnotes),
+              [this](const ActivityResult& result) {
+                if (!result.isCancelled) {
+                  const auto& footnoteResult = std::get<FootnoteResult>(result.data);
+                  navigateToHref(footnoteResult.href, true);
+                }
+                requestUpdate();
+              });
+        }
+        return;
+      default:
+        break;
+    }
+  }
   if (confirmLongPressed) {
     switch (SETTINGS.longPressMenuFunction) {
       case CrossPointSettings::LP_MENU_BOOKMARK:

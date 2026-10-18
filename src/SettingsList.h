@@ -21,6 +21,7 @@
 #include "CrossPointSettings.h"
 #include "KOReaderCredentialStore.h"
 #include "QuickAction.h"
+#include "QuickActions.h"
 #include "ReaderFontSizes.h"
 #include "activities/settings/SettingsActivity.h"
 #include "platform/SimulatorBoardCompat.h"
@@ -268,11 +269,11 @@ inline const std::vector<SettingInfo>& getBaseSettingsList() {
     statusBarClockValues[CrossPointSettings::STATUS_BAR_CLOCK_LEFT] = StrId::STR_DIR_LEFT;
 
     const bool hasTilt = halTiltSensor.isAvailable();
-    // 72 unconditional descriptors; the IMU branch adds the Motion sensor tab: reader,
+    // 78 unconditional descriptors; the IMU branch adds the Motion sensor tab: reader,
     // tab and row tilt, the two flick strengths, the two hard shake rows, face down, face up
     // and double tap.
     // Cold-catalog tests cover each capability branch and the IMU variant.
-    constexpr size_t fixedCount = 72
+    constexpr size_t fixedCount = 78
 #if defined(FREEINK_CAP_FRONTLIGHT) && FREEINK_CAP_FRONTLIGHT
                                   + 1
 #endif
@@ -433,6 +434,23 @@ inline const std::vector<SettingInfo>& getBaseSettingsList() {
     // in every menu and list, and which one turns the page in a book.
     v.push_back(SettingInfo::Toggle(StrId::STR_SIDE_BTNS_SWAP, &CrossPointSettings::sideButtonsSwapped,
                             "sideButtonsSwapped", StrId::STR_CAT_CONTROLS));
+    // Tab menus: front pair switches tabs, side pair steps rows.
+    v.push_back(SettingInfo::Toggle(StrId::STR_MENU_BTNS_SWAP, &CrossPointSettings::menuButtonsSwapped,
+                            "menuButtonsSwapped", StrId::STR_CAT_CONTROLS));
+    // Quick Actions: a long press of Back opens a menu of these (Home and the EPUB reader).
+    {
+      const std::vector<StrId> quickLabels(std::begin(quickactions::LABELS), std::end(quickactions::LABELS));
+      v.push_back(SettingInfo::Enum(StrId::STR_QUICK_ACTION_1, &CrossPointSettings::quickAction1, quickLabels,
+                            "quickAction1", StrId::STR_CAT_CONTROLS));
+      v.push_back(SettingInfo::Enum(StrId::STR_QUICK_ACTION_2, &CrossPointSettings::quickAction2, quickLabels,
+                            "quickAction2", StrId::STR_CAT_CONTROLS));
+      v.push_back(SettingInfo::Enum(StrId::STR_QUICK_ACTION_3, &CrossPointSettings::quickAction3, quickLabels,
+                            "quickAction3", StrId::STR_CAT_CONTROLS));
+      v.push_back(SettingInfo::Enum(StrId::STR_QUICK_ACTION_4, &CrossPointSettings::quickAction4, quickLabels,
+                            "quickAction4", StrId::STR_CAT_CONTROLS));
+      v.push_back(SettingInfo::Enum(StrId::STR_QUICK_ACTION_5, &CrossPointSettings::quickAction5, quickLabels,
+                            "quickAction5", StrId::STR_CAT_CONTROLS));
+    }
     v.push_back(SettingInfo::Enum(StrId::STR_KEYBOARD_GEOMETRY, &CrossPointSettings::keyboardAligned,
                           {StrId::STR_KEYBOARD_STAGGERED, StrId::STR_KEYBOARD_ALIGNED}, "keyboardAligned",
                           StrId::STR_CAT_KEYBOARD));

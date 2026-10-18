@@ -60,6 +60,19 @@ MappedInputManager::Button MappedInputManager::mapScreenDirection(const Button b
   return directions[orientation][direction];
 }
 
+MappedInputManager::Button MappedInputManager::rowPrevious() {
+  return SETTINGS.menuButtonsSwapped ? Button::Up : Button::Left;
+}
+MappedInputManager::Button MappedInputManager::rowNext() {
+  return SETTINGS.menuButtonsSwapped ? Button::Down : Button::Right;
+}
+MappedInputManager::Button MappedInputManager::tabPrevious() {
+  return SETTINGS.menuButtonsSwapped ? Button::Left : Button::Up;
+}
+MappedInputManager::Button MappedInputManager::tabNext() {
+  return SETTINGS.menuButtonsSwapped ? Button::Right : Button::Down;
+}
+
 uint8_t MappedInputManager::physicalBack() const { return SETTINGS.frontButtonBack; }
 
 bool MappedInputManager::mapButton(const Button button, bool (HalGPIO::*fn)(uint8_t) const) const {

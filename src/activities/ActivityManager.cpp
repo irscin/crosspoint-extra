@@ -414,11 +414,12 @@ void ActivityManager::replaceActivity(std::unique_ptr<Activity>&& newActivity) {
   }
 }
 
-void ActivityManager::goToFileTransfer() {
+void ActivityManager::goToFileTransfer(const int presetMode) {
   // Opened from a book, File transfer is a detour: it hands the reader back on
   // exit. The reader has already saved its position, it does so on every paint.
   std::string book = isReaderActivity() ? APP_STATE.openEpubPath : std::string();
-  replaceActivity(std::make_unique<CrossPointWebServerActivity>(renderer, mappedInput, std::move(book)));
+  replaceActivity(
+      std::make_unique<CrossPointWebServerActivity>(renderer, mappedInput, std::move(book), presetMode));
 }
 
 void ActivityManager::goToUsbDrive() {
@@ -603,6 +604,16 @@ bool ActivityManager::isForegroundActivityManagingTiltSensor() const {
 
 bool ActivityManager::isForegroundReaderReady() const {
   return isForegroundReaderActivity() && static_cast<ReaderActivity*>(currentActivity.get())->isPageReady();
+}
+
+bool ActivityManager::isForegroundHome() const { return currentActivity && currentActivity->isHomeActivity(); }
+
+bool ActivityManager::foregroundReaderHasQuickActions() const {
+  return isForegroundReaderReady() && static_cast<ReaderActivity*>(currentActivity.get())->supportsQuickActions();
+}
+
+bool ActivityManager::isForegroundNamed(const char* activityName) const {
+  return currentActivity && currentActivity->name == activityName;
 }
 
 bool ActivityManager::foregroundReaderHoldsRadio() const {

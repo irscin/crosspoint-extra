@@ -39,6 +39,7 @@ class CrossPointWebServerActivity final : public Activity {
   std::string returnBook;
   // Set once the exit reopens returnBook, so a Wi-Fi restart boots into it.
   bool toBook = false;
+  int presetMode = -1;
 #ifdef TENOR_UI_ACCEPTANCE
   bool autoJoinForTest = false;
 #endif
@@ -76,9 +77,12 @@ class CrossPointWebServerActivity final : public Activity {
 #ifdef TENOR_UI_ACCEPTANCE
   void requestAutoJoinForTest() { autoJoinForTest = true; }
 #endif
+  // presetMode is a NetworkMode value that skips the mode picker; -1 shows the picker.
   explicit CrossPointWebServerActivity(GfxRenderer& renderer, MappedInputManager& mappedInput,
-                                       std::string returnBook = {})
-      : Activity("CrossPointWebServer", renderer, mappedInput), returnBook(std::move(returnBook)) {}
+                                       std::string returnBook = {}, int presetMode = -1)
+      : Activity("CrossPointWebServer", renderer, mappedInput),
+        returnBook(std::move(returnBook)),
+        presetMode(presetMode) {}
   void onEnter() override;
   void onExit() override;
   void loop() override;

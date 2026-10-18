@@ -349,6 +349,7 @@ class EpubReaderActivity final : public ReaderActivity {
 
   bool externalPageTurnAllowed() const override;
   bool requestShortcut(ReaderShortcut shortcut) override;
+  bool supportsQuickActions() const override { return true; }
   bool manualPageTurnReady() const override;
   bool pageAwaitsLayout() const override;
   bool loadBook() override;

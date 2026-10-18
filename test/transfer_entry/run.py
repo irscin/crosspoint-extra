@@ -54,7 +54,7 @@ class TransferEntryContract(unittest.TestCase):
         self.assertRegex(enter, r"result\.isCancelled\s*\)\s*\{\s*leave\(\)")
         # Only a session opened from a book carries a book back; Home and Settings
         # open it without one, so leave() ends on Home for them.
-        entry = function_body(self.manager, "void ActivityManager::goToFileTransfer()")
+        entry = function_body(self.manager, "void ActivityManager::goToFileTransfer(const int presetMode)")
         self.assertIn("isReaderActivity() ? APP_STATE.openEpubPath : std::string()", entry)
         leave = function_body(self.activity, "void CrossPointWebServerActivity::leave()")
         self.assertRegex(leave, r"^[^{]*\{\s*if \(!returnBook\.empty\(\) &&")

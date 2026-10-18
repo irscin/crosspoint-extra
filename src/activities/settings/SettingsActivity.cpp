@@ -358,11 +358,11 @@ void SettingsActivity::navigateButtons() {
   };
   const auto next = [this, n, toi] { toi(ringPos() >= n ? 1 : ringPos() + 1); };
   const auto previous = [this, n, toi] { toi(ringPos() <= 1 ? n : ringPos() - 1); };
-  buttonNavigator.onRelease({MappedInputManager::Button::Right}, next);
-  buttonNavigator.onRelease({MappedInputManager::Button::Left}, previous);
+  buttonNavigator.onRelease({MappedInputManager::rowNext()}, next);
+  buttonNavigator.onRelease({MappedInputManager::rowPrevious()}, previous);
 
-  tabNavigator.onRelease({MappedInputManager::Button::Down}, [this] { queueNavIntent(NavIntent::TabNext); });
-  tabNavigator.onRelease({MappedInputManager::Button::Up}, [this] { queueNavIntent(NavIntent::TabPrev); });
+  tabNavigator.onRelease({MappedInputManager::tabNext()}, [this] { queueNavIntent(NavIntent::TabNext); });
+  tabNavigator.onRelease({MappedInputManager::tabPrevious()}, [this] { queueNavIntent(NavIntent::TabPrev); });
 }
 
 bool SettingsActivity::saveSettings() {
@@ -802,7 +802,9 @@ void SettingsActivity::render(RenderLock&&) {
           ? tr(STR_SELECT)
           : ((*currentSettings)[ring - 1].nameId == StrId::STR_TIME_TO_SLEEP ? tr(STR_SELECT) : tr(STR_TOGGLE));
 
-  const auto labels = mappedInput.mapLabels(tr(STR_BACK), confirmLabel, tr(STR_DIR_UP), tr(STR_DIR_DOWN));
+  const auto labels = mappedInput.mapLabels(
+      tr(STR_BACK), confirmLabel, SETTINGS.menuButtonsSwapped ? tr(STR_DIR_LEFT) : tr(STR_DIR_UP),
+      SETTINGS.menuButtonsSwapped ? tr(STR_DIR_RIGHT) : tr(STR_DIR_DOWN));
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 
   if (saveFailed.load()) GUI.drawPopup(renderer, tr(STR_HABIT_SAVE_FAILED));

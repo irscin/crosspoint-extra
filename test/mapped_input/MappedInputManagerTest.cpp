@@ -151,6 +151,22 @@ TEST(MappedInputSideSwap, SwapAndReaderLayoutCombine) {
   SETTINGS.sideButtonLayout = CrossPointSettings::PREV_NEXT;
 }
 
+// "Swap front/side buttons in menus": the row axis and the tab axis trade physical pairs.
+TEST(MappedInputMenuSwap, AxesTradePairs) {
+  using Button = MappedInputManager::Button;
+  SETTINGS.menuButtonsSwapped = 0;
+  EXPECT_EQ(MappedInputManager::rowPrevious(), Button::Left);
+  EXPECT_EQ(MappedInputManager::rowNext(), Button::Right);
+  EXPECT_EQ(MappedInputManager::tabPrevious(), Button::Up);
+  EXPECT_EQ(MappedInputManager::tabNext(), Button::Down);
+  SETTINGS.menuButtonsSwapped = 1;
+  EXPECT_EQ(MappedInputManager::rowPrevious(), Button::Up);
+  EXPECT_EQ(MappedInputManager::rowNext(), Button::Down);
+  EXPECT_EQ(MappedInputManager::tabPrevious(), Button::Left);
+  EXPECT_EQ(MappedInputManager::tabNext(), Button::Right);
+  SETTINGS.menuButtonsSwapped = 0;
+}
+
 TEST(MappedInputSafetyNet, NhanPhimKhopVoiViecNutDoLam) {
   const struct {
     uint8_t back, confirm, left, right;
